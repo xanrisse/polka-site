@@ -1177,3 +1177,203 @@ h1 span {
     bottom: 24px;
   }
 }
+@media (max-width: 760px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .section {
+    min-height: auto;
+    padding: 72px 16px;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 42px;
+  }
+
+  h1 {
+    font-size: clamp(42px, 14vw, 64px);
+    line-height: 0.92;
+    letter-spacing: -0.07em;
+  }
+
+  .hero-lead {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .hero-grid {
+    gap: 28px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    margin-top: 24px;
+  }
+
+  .primary-btn,
+  .ghost-btn {
+    width: 100%;
+  }
+
+  .trust-row {
+    grid-template-columns: 1fr;
+    margin-top: 24px;
+  }
+
+  .hero-card {
+    min-height: 560px;
+    padding: 14px;
+  }
+
+  .book-cover {
+    inset: 14px 14px auto;
+    min-height: 310px;
+    padding: 22px;
+  }
+
+  .book-cover h2 {
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  .mini-route {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .route-point {
+    min-height: 42px;
+    font-size: 13px;
+  }
+
+  .journey-section {
+    gap: 22px;
+  }
+
+  .journey-copy h2,
+  .map-copy h2,
+  .download-card h2 {
+    font-size: clamp(34px, 11vw, 52px);
+    line-height: 0.96;
+  }
+
+  .section-subtitle {
+    font-size: 19px;
+  }
+
+  .section-text,
+  .map-copy p,
+  .download-card p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .stat-card {
+    margin-top: 22px;
+  }
+
+  .visual-stage,
+  .large-map {
+    min-height: 430px;
+  }
+
+  .city-map {
+    inset: 16px;
+  }
+
+  .kiosk-card {
+    right: 20px;
+    bottom: 20px;
+    width: 210px;
+  }
+
+  .phone-card {
+    width: 88%;
+    min-height: 430px;
+    border-radius: 32px;
+  }
+
+  .collection-card {
+    left: 18px;
+    top: 18px;
+    width: calc(100% - 36px);
+  }
+
+  .collection-card h3 {
+    font-size: 25px;
+    min-height: auto;
+  }
+
+  .comment-stream {
+    left: 18px;
+    right: 18px;
+    bottom: 92px;
+  }
+
+  .comment-stream span {
+    font-size: 13px;
+  }
+
+  .quote-panel {
+    left: 18px;
+    top: 18px;
+    width: calc(100% - 36px);
+    padding: 24px;
+  }
+
+  .quote-panel p {
+    font-size: 24px;
+  }
+
+  .story-panel {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    width: auto;
+  }
+
+  .big-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .download-card {
+    border-radius: 32px;
+  }
+
+  .download-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qr-card {
+    max-width: 180px;
+    margin: 0 auto;
+  }
+
+  .floating-nav {
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+    width: auto;
+    transform: none;
+    padding: 8px;
+    grid-template-columns: 1fr;
+    border-radius: 22px;
+  }
+
+  .nav-timeline {
+    justify-content: space-between;
+  }
+
+  .nav-dot {
+    width: 34px;
+    height: 34px;
+  }
+
+  .brand-mark,
+  .nav-cta {
+    display: none;
+  }
+}
