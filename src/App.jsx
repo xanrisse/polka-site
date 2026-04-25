@@ -472,10 +472,9 @@ export default function App() {
       <section id="download" className="download-section section">
         <div className="download-card">
           <p className="eyebrow">начни свою историю</p>
-          <h2>Ты можешь быть Аней, Димой или кем-то ещё</h2>
+          <h2>алия лох,</h2>
           <p>
-            Неважно, будешь ты читателем, автором или просто тем, кто передаёт
-            книгу дальше. «Полка» ждёт тебя.
+            Неважно, будет вас в групе двое или троя, или задали вам четверым, все равно все придется делать рание...
           </p>
 
           <div className="download-grid">
