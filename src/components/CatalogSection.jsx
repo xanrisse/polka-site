@@ -146,7 +146,7 @@ export default function CatalogSection({ books, onReserveBook }) {
   return (
     <>
       <section id="catalog" className="section catalog-section">
-        <div className="service-head" data-reveal="up">
+        <div className="service-head">
           <p className="eyebrow">живой каталог</p>
           <h2>Книги, которые можно забрать сейчас</h2>
           <p>
@@ -156,7 +156,7 @@ export default function CatalogSection({ books, onReserveBook }) {
           </p>
         </div>
 
-        <div className="catalog-discovery" data-reveal="up">
+        <div className="catalog-discovery">
           <p>Быстрые входы</p>
 
           <div className="catalog-quick-picks">
@@ -173,7 +173,7 @@ export default function CatalogSection({ books, onReserveBook }) {
           </div>
         </div>
 
-        <div className="catalog-toolbar" data-reveal="up">
+        <div className="catalog-toolbar">
           <input
             value={bookQuery}
             onChange={(event) => updateBookQuery(event.target.value)}
@@ -196,7 +196,7 @@ export default function CatalogSection({ books, onReserveBook }) {
           </div>
         </div>
 
-        <div className="catalog-sort-row" data-reveal="up">
+        <div className="catalog-sort-row">
           <span>Порядок показа</span>
 
           <div className="catalog-sort-pills">

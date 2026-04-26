@@ -789,7 +789,7 @@ export default function App() {
             </div>
           </div>
 
-          <div data-reveal="right">
+          <div className="map-visual-shell">
             <DeferredMoscowMap label="Единая карта книгоматов по Москве" />
           </div>
         </section>
