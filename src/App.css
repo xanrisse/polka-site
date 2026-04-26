@@ -2312,3 +2312,399 @@ h1 span {
     grid-template-rows: 220px 1fr;
   }
 }
+.generated-book-cover {
+  position: relative;
+  margin: 18px 18px 0;
+  height: 260px;
+  padding: 26px 22px;
+  border-radius: 24px;
+  overflow: hidden;
+  color: #fff7e8;
+  box-shadow:
+    0 28px 55px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(255, 247, 232, 0.16);
+  transform-style: preserve-3d;
+  transition: 0.35s ease;
+}
+
+.catalog-book-card:hover .generated-book-cover {
+  transform: translateY(-18px) rotateX(5deg) rotateY(-8deg) scale(1.04);
+  box-shadow:
+    0 48px 80px rgba(0, 0, 0, 0.5),
+    0 0 48px rgba(240, 179, 91, 0.18);
+}
+
+.generated-book-cover::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(255, 247, 232, 0.26);
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.generated-book-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.32), transparent 22%),
+    radial-gradient(circle at 72% 24%, rgba(255, 255, 255, 0.22), transparent 28%);
+  pointer-events: none;
+}
+
+.book-shine {
+  position: absolute;
+  left: -40%;
+  top: -20%;
+  width: 45%;
+  height: 150%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.24),
+    transparent
+  );
+  transform: rotate(18deg);
+  transition: 0.55s ease;
+}
+
+.catalog-book-card:hover .book-shine {
+  left: 115%;
+}
+
+.book-spine-mini {
+  position: absolute;
+  left: 34px;
+  top: 0;
+  width: 12px;
+  height: 100%;
+  background: rgba(255, 247, 232, 0.18);
+}
+
+.book-genre {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(18, 15, 11, 0.38);
+  backdrop-filter: blur(10px);
+  font-size: 10px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.generated-book-cover strong {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin-top: 62px;
+  max-width: 82%;
+  font-size: 28px;
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+}
+
+.generated-book-cover small {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin-top: 14px;
+  max-width: 80%;
+  color: rgba(255, 247, 232, 0.72);
+  font-weight: 800;
+}
+
+.book-pattern {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  z-index: 1;
+  display: grid;
+  gap: 8px;
+}
+
+.book-pattern i {
+  display: block;
+  width: 72px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 247, 232, 0.22);
+}
+
+.book-pattern i:nth-child(2) {
+  width: 52px;
+  margin-left: auto;
+}
+
+.book-pattern i:nth-child(3) {
+  width: 36px;
+  margin-left: auto;
+}
+
+.generated-gold {
+  background:
+    radial-gradient(circle at 78% 22%, rgba(255, 235, 180, 0.34), transparent 28%),
+    linear-gradient(145deg, #d8a557, #6d3e1f);
+}
+
+.generated-red {
+  background:
+    radial-gradient(circle at 76% 20%, rgba(255, 180, 150, 0.28), transparent 30%),
+    linear-gradient(145deg, #e56d5b, #4b1716);
+}
+
+.generated-green {
+  background:
+    radial-gradient(circle at 76% 20%, rgba(190, 255, 210, 0.28), transparent 30%),
+    linear-gradient(145deg, #78d5a4, #183c2b);
+}
+
+.generated-blue {
+  background:
+    radial-gradient(circle at 76% 20%, rgba(190, 220, 255, 0.32), transparent 30%),
+    linear-gradient(145deg, #8bbcff, #202c58);
+}
+
+.generated-violet {
+  background:
+    radial-gradient(circle at 76% 20%, rgba(230, 200, 255, 0.32), transparent 30%),
+    linear-gradient(145deg, #c4a3ff, #3c235f);
+}
+.book-snow {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.72;
+}
+
+.snow-book-fall {
+  position: absolute;
+  left: var(--x);
+  top: 0;
+  width: 1px;
+  height: 1px;
+  animation: snowBookFall var(--duration) linear infinite;
+  animation-delay: var(--delay);
+  will-change: transform;
+}
+
+.snow-book {
+  position: absolute;
+  width: calc(34px * var(--scale));
+  height: calc(48px * var(--scale));
+  transform-style: preserve-3d;
+  opacity: calc(0.25 + var(--depth));
+  filter: blur(calc((1 - var(--depth)) * 0.9px));
+  animation:
+    snowBookDrift calc(var(--duration, 38s) * 0.72) ease-in-out infinite,
+    snowBookSpin calc(var(--duration, 38s) * 0.58) ease-in-out infinite;
+  will-change: transform, margin-left;
+}
+
+.book-front {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 5px 10px 10px 5px;
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.34), transparent 24%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(135deg, #d9a24e, #6f3c1f);
+  box-shadow:
+    0 18px 34px rgba(0, 0, 0, 0.22),
+    inset 0 0 0 1px rgba(255, 247, 232, 0.22),
+    inset -4px 0 0 rgba(255, 247, 232, 0.13);
+}
+
+.book-front::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(255, 247, 232, 0.28);
+  border-radius: 4px 7px 7px 4px;
+}
+
+.book-front::after {
+  content: "";
+  position: absolute;
+  left: 32%;
+  top: 28%;
+  width: 44%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 247, 232, 0.32);
+  box-shadow:
+    0 8px 0 rgba(255, 247, 232, 0.22),
+    0 16px 0 rgba(255, 247, 232, 0.16);
+}
+
+.book-pages {
+  position: absolute;
+  z-index: 2;
+  right: calc(-6px * var(--scale));
+  top: calc(5px * var(--scale));
+  width: calc(8px * var(--scale));
+  height: calc(38px * var(--scale));
+  border-radius: 0 8px 8px 0;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 247, 232, 0.78) 0 2px,
+      rgba(210, 190, 155, 0.78) 2px 4px
+    );
+  transform: skewY(-5deg);
+  box-shadow: inset 1px 0 0 rgba(18, 15, 11, 0.18);
+}
+
+.book-spine-snow {
+  position: absolute;
+  z-index: 4;
+  left: calc(7px * var(--scale));
+  top: 0;
+  width: calc(5px * var(--scale));
+  height: 100%;
+  background: rgba(18, 15, 11, 0.28);
+  box-shadow:
+    5px 0 0 rgba(255, 247, 232, 0.12),
+    -2px 0 0 rgba(0, 0, 0, 0.18);
+}
+
+.snow-book b {
+  position: absolute;
+  z-index: 1;
+  left: 12%;
+  top: 8%;
+  width: 78%;
+  height: 86%;
+  border-radius: 6px 12px 12px 6px;
+  background: rgba(0, 0, 0, 0.18);
+  filter: blur(10px);
+  transform: translateY(16px);
+}
+
+.snow-book-0 .book-front {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.34), transparent 24%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(135deg, #d9a24e, #6f3c1f);
+}
+
+.snow-book-1 .book-front {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(135deg, #78d5a4, #1d4a34);
+}
+
+.snow-book-2 .book-front {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.3), transparent 24%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(135deg, #8bbcff, #202c58);
+}
+
+.snow-book-3 .book-front {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(135deg, #c4a3ff, #3c235f);
+}
+
+.snow-book-4 .book-front {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(135deg, #e56d5b, #4b1716);
+}
+
+.snow-book-5 .book-front {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(135deg, #f4ead8, #9b7650);
+}
+
+@keyframes snowBookFall {
+  from {
+    transform: translate3d(0, -18vh, 0);
+  }
+
+  to {
+    transform: translate3d(0, 118vh, 0);
+  }
+}
+
+@keyframes snowBookDrift {
+  0% {
+    margin-left: calc(-36px * var(--drift));
+  }
+
+  20% {
+    margin-left: calc(22px * var(--drift));
+  }
+
+  45% {
+    margin-left: calc(54px * var(--drift));
+  }
+
+  70% {
+    margin-left: calc(-12px * var(--drift));
+  }
+
+  100% {
+    margin-left: calc(-36px * var(--drift));
+  }
+}
+
+@keyframes snowBookSpin {
+  0% {
+    transform:
+      rotateZ(var(--tilt))
+      rotateY(0deg)
+      rotateX(0deg);
+  }
+
+  28% {
+    transform:
+      rotateZ(calc(var(--tilt) + 16deg))
+      rotateY(34deg)
+      rotateX(8deg);
+  }
+
+  54% {
+    transform:
+      rotateZ(calc(var(--tilt) - 12deg))
+      rotateY(-26deg)
+      rotateX(-6deg);
+  }
+
+  78% {
+    transform:
+      rotateZ(calc(var(--tilt) + 8deg))
+      rotateY(18deg)
+      rotateX(5deg);
+  }
+
+  100% {
+    transform:
+      rotateZ(var(--tilt))
+      rotateY(0deg)
+      rotateX(0deg);
+  }
+}
+
+@media (max-width: 760px) {
+  .book-snow {
+    opacity: 0.34;
+  }
+
+  .snow-book {
+    width: calc(28px * var(--scale));
+    height: calc(40px * var(--scale));
+  }
+}

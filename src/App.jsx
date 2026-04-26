@@ -433,6 +433,34 @@ const openModal = (type) => {
       </div>
 
       <div className="floating-book" />
+      <div className="book-snow" aria-hidden="true">
+  {Array.from({ length: 32 }).map((_, index) => (
+    <span
+      key={index}
+      className="snow-book-fall"
+      style={{
+        "--x": `${(index * 29 + 7) % 100}%`,
+        "--delay": `${(index % 16) * -2.6}s`,
+        "--duration": `${34 + (index % 10) * 3.8}s`,
+      }}
+    >
+      <i
+        className={`snow-book snow-book-${index % 6}`}
+        style={{
+          "--drift": `${index % 2 === 0 ? 1 : -1}`,
+          "--scale": `${0.72 + (index % 6) * 0.09}`,
+          "--depth": `${0.22 + (index % 5) * 0.11}`,
+          "--tilt": `${-22 + (index % 9) * 6}deg`,
+        }}
+      >
+        <i className="book-front" />
+        <i className="book-pages" />
+        <i className="book-spine-snow" />
+        <b />
+      </i>
+    </span>
+  ))}
+</div>
 
       <main className="site-shell">
         <nav className="floating-nav">
@@ -766,10 +794,18 @@ const openModal = (type) => {
   <div className="book-catalog-grid">
     {filteredBooks.map((book) => (
       <article key={book.id} className="catalog-book-card">
-        <div className={`catalog-cover cover-${book.color}`}>
-          <span>{book.genre}</span>
-          <strong>{book.title}</strong>
-        </div>
+        <div className={`generated-book-cover generated-${book.color}`}>
+  <div className="book-shine" />
+  <div className="book-spine-mini" />
+  <span className="book-genre">{book.genre}</span>
+  <strong>{book.title}</strong>
+  <small>{book.author}</small>
+  <div className="book-pattern">
+    <i />
+    <i />
+    <i />
+  </div>
+</div>
 
         <div className="catalog-book-info">
           <div>
