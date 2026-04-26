@@ -120,7 +120,10 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
                 <p className="book-detail-author">{book.author}</p>
               </div>
 
-              <span className={`book-status status-${book.status}`}>
+              <span
+                className={`book-status status-${book.status}`}
+                translate="no"
+              >
                 {statusLabel}
               </span>
             </div>

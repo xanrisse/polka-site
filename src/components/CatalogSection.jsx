@@ -287,7 +287,10 @@ export default function CatalogSection({ books, onReserveBook }) {
                   </button>
 
                   <div className="book-status-row">
-                    <span className={`book-status status-${book.status}`}>
+                    <span
+                      className={`book-status status-${book.status}`}
+                      translate="no"
+                    >
                       {bookStatusLabels[book.status] ?? book.status}
                     </span>
 
