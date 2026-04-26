@@ -183,7 +183,7 @@ export default function App() {
 
     if (revealNodes.length === 0) return undefined;
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
       revealNodes.forEach((node) => node.classList.add("is-visible"));
       return undefined;
     }

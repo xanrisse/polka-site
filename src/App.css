@@ -20,6 +20,8 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
 }
 
 body {
@@ -31,6 +33,13 @@ body {
   color: var(--text);
   font-family: Inter, Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow-x: hidden;
+  max-width: 100%;
+}
+
+#root {
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
 }
 
 button {
@@ -174,6 +183,13 @@ h2,
 h3,
 p {
   margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+  text-wrap: balance;
 }
 
 h1 {
@@ -1942,14 +1958,16 @@ h1 span {
   z-index: 2;
 }
 
-.journey-section,
-.hero-card,
-.visual-stage,
-.download-card,
-.large-map {
-  animation: revealSoft linear both;
-  animation-timeline: view();
-  animation-range: entry 0% cover 32%;
+@supports (animation-timeline: view()) {
+  .journey-section,
+  .hero-card,
+  .visual-stage,
+  .download-card,
+  .large-map {
+    animation: revealSoft linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 32%;
+  }
 }
 
 .primary-btn,
@@ -5939,5 +5957,104 @@ h1 span {
 
   .book-detail-actions {
     gap: 8px;
+  }
+}
+
+@media (min-width: 821px) and (max-width: 1180px) {
+  .section {
+    padding: 112px clamp(18px, 4vw, 52px);
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .hero-grid,
+  .journey-section,
+  .map-section,
+  .manifesto-shell,
+  .split-info-section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-grid,
+  .journey-section,
+  .map-section {
+    gap: 34px;
+  }
+
+  .hero-card {
+    min-height: 640px;
+  }
+
+  .journey-copy,
+  .map-copy,
+  .manifesto-copy,
+  .info-panel {
+    min-width: 0;
+    max-width: 880px;
+  }
+
+  .manifesto-copy {
+    position: relative;
+    top: auto;
+  }
+
+  .manifesto-values,
+  .action-grid,
+  .partner-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .section-rail {
+    position: relative;
+    top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .section-rail-step {
+    flex: 0 0 auto;
+  }
+
+  .section-rail-line {
+    flex: 0 0 72px;
+    width: 72px;
+    min-height: 1px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      rgb(var(--page-accent-rgb) / 0.84),
+      rgb(var(--page-support-rgb) / 0.14)
+    );
+  }
+
+  .section-rail-label {
+    min-width: 0;
+    writing-mode: initial;
+    transform: none;
+    overflow-wrap: anywhere;
+  }
+
+  .section-subtitle {
+    max-width: 34rem;
+  }
+
+  .section-text,
+  .journey-footnote,
+  .stat-card {
+    max-width: 720px;
+  }
+
+  .visual-stage,
+  .large-map {
+    min-height: 520px;
+  }
+
+  .book-catalog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
