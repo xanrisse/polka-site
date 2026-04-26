@@ -21,6 +21,21 @@ const heroSignals = [
   "Первые публикации авторов",
 ];
 
+const mapCapabilities = [
+  {
+    title: "Найти книгу",
+    text: "Сразу увидеть ближайший книгомат и статус нужного экземпляра.",
+  },
+  {
+    title: "Оставить свою",
+    text: "Выбрать точку, открыть инструкцию и передать книгу дальше без лишних шагов.",
+  },
+  {
+    title: "Понять маршрут",
+    text: "Отследить, где книга была раньше и как движется по городу сейчас.",
+  },
+];
+
 function useActiveSection(ids) {
   const [active, setActive] = useState(ids[0]);
 
@@ -534,11 +549,31 @@ export default function App() {
                   <div className="forgotten-visual">
                     <div className="dust-light" />
 
-                    <div className="book-stack">
-                      <span />
-                      <span />
-                      <span />
-                      <span />
+                    <div className="forgotten-shelf-line" aria-hidden="true" />
+
+                    <div className="forgotten-books">
+                      <article className="forgotten-book forgotten-book-one">
+                        <strong>Роман</strong>
+                        <span>3 года на полке</span>
+                      </article>
+
+                      <article className="forgotten-book forgotten-book-two">
+                        <strong>Эссе</strong>
+                        <span>без движения</span>
+                      </article>
+
+                      <article className="forgotten-book forgotten-book-three">
+                        <strong>История</strong>
+                        <span>ждёт читателя</span>
+                      </article>
+                    </div>
+
+                    <div className="forgotten-note-card">
+                      <span>домашняя библиотека</span>
+                      <p>
+                        Книга всё ещё здесь, но уже готова выйти из режима
+                        хранения и снова стать частью города.
+                      </p>
                     </div>
 
                     <div className="hover-note">{item.visualTitle}</div>
@@ -547,20 +582,55 @@ export default function App() {
 
                 {index === 1 && (
                   <div className="kiosk-visual">
-                    <DeferredMoscowMap label="Подключаем активную точку на Павелецкой" />
+                    <div className="kiosk-machine">
+                      <div className="kiosk-head">
+                        <span className="kiosk-head-dot" />
+                        <p>книгомат · павелецкая</p>
+                        <strong>точка активирована</strong>
+                      </div>
 
-                    <div className="kiosk-card">
-                      <span className="scan-line" />
-                      <strong>Книгомат</strong>
-                      <p>Книга добавлена в приложение</p>
-                      <small>00:05 после загрузки</small>
+                      <div className="kiosk-body-shell">
+                        <div className="kiosk-slot">
+                          <span className="scan-line" />
+                          <div className="kiosk-book">
+                            <i className="kiosk-book-spine" />
+                            <strong>Полка</strong>
+                            <small>роман · принят</small>
+                          </div>
+                        </div>
+
+                        <div className="kiosk-side-panel">
+                          <span className="kiosk-status-pill">ячейка свободна</span>
+
+                          <div className="kiosk-upload-card">
+                            <strong>Книга принята в систему</strong>
+                            <p>
+                              После загрузки она появляется на общей карте и
+                              становится видимой следующему читателю.
+                            </p>
+                          </div>
+
+                          <div className="kiosk-step-list">
+                            <span>01 · открыть ячейку</span>
+                            <span>02 · отсканировать QR</span>
+                            <span>03 · передать книгу маршруту</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="kiosk-floor-glow" />
                     </div>
                   </div>
                 )}
 
                 {index === 2 && (
                   <div className="app-visual">
-                    <div className="phone-card">
+                    <div className="app-stage-tag app-stage-tag-left">
+                      <span>живой отклик</span>
+                      <strong>Отзыв появился сразу после чтения</strong>
+                    </div>
+
+                    <div className="phone-card phone-card-expanded">
                       <div className="phone-header" />
 
                       <div className="book-row">
@@ -583,6 +653,11 @@ export default function App() {
                           <small>17 отзывов · 4 подборки</small>
                         </div>
                       </div>
+                    </div>
+
+                    <div className="app-stage-tag app-stage-tag-right">
+                      <span>маршрут книги</span>
+                      <strong>Павелецкая → Курский вокзал</strong>
                     </div>
                   </div>
                 )}
@@ -660,12 +735,13 @@ export default function App() {
 
         <section id="live-map" className="section map-section">
           <div className="map-copy" data-reveal="left">
-            <p className="eyebrow">книга продолжает путь</p>
-            <h2>Ты можешь стать следующим читателем</h2>
+            <p className="eyebrow">единая карта книгоматов</p>
+            <h2>Одна карта для поиска, передачи и маршрута книги</h2>
 
             <p>
-              Сейчас эта книга ждёт нового читателя в книгомате на Курском
-              вокзале. А рядом — ещё сотни точек, где истории только начинаются.
+              Здесь собрана вся городская логика «Полки»: можно найти нужную
+              книгу, выбрать ближайший книгомат, оставить свой экземпляр и
+              понять, как история движется по Москве.
             </p>
 
             <div className="big-metrics">
@@ -691,14 +767,27 @@ export default function App() {
               </div>
             </div>
 
+            <div className="map-capability-grid">
+              {mapCapabilities.map((item) => (
+                <article key={item.title} className="map-capability-card">
+                  <strong>{item.title}</strong>
+                  <p>{item.text}</p>
+                </article>
+              ))}
+            </div>
+
             <div className="hero-actions">
-              <button className="primary-btn" onClick={() => openModal("findBook")}>Найти эту книгу</button>
-              <button className="ghost-btn" onClick={() => openModal("leaveBook")}>Оставить свою книгу</button>
+              <button className="primary-btn" onClick={() => openModal("findBook")}>
+                Найти эту книгу
+              </button>
+              <button className="ghost-btn" onClick={() => openModal("leaveBook")}>
+                Оставить свою книгу
+              </button>
             </div>
           </div>
 
           <div data-reveal="right">
-            <DeferredMoscowMap label="Подтягиваем ближайшие книгоматы по Москве" />
+            <DeferredMoscowMap label="Единая карта книгоматов по Москве" />
           </div>
         </section>
         <CatalogSection books={catalogBooks} onReserveBook={reserveBook} />
@@ -879,6 +968,23 @@ export default function App() {
 
                 <small>QR для быстрой установки</small>
               </div>
+            </div>
+
+            <div className="download-prototype-cta">
+              <a
+                className="prototype-app-link"
+                href="https://www.figma.com/proto/poI5QJI0uVlL6MNTjfxkbY/Untitled?node-id=26-18&starting-point-node-id=26%3A18&t=mteX7ZfVZXeJSiVH-1"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>мобильный прототип</span>
+                Открыть приложение в Figma
+              </a>
+
+              <p>
+                Если хочешь посмотреть мобильный сценарий отдельно, открой
+                интерактивный прототип приложения.
+              </p>
             </div>
           </div>
         </section>

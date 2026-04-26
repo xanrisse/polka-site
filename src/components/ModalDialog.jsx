@@ -11,10 +11,17 @@ export default function ModalDialog({ modal, onClose }) {
     if (!modal) return undefined;
 
     const dialog = modalRef.current;
+    const scrollY = window.scrollY;
     const previousFocusedElement =
       document.activeElement instanceof HTMLElement
         ? document.activeElement
         : null;
+    const previousBodyStyles = {
+      overflow: document.body.style.overflow,
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+    };
     const focusableSelector =
       'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -46,16 +53,21 @@ export default function ModalDialog({ modal, onClose }) {
       }
     };
 
-    const previousOverflow = document.body.style.overflow;
-
     document.body.style.overflow = "hidden";
-    closeModalButtonRef.current?.focus();
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    closeModalButtonRef.current?.focus({ preventScroll: true });
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousBodyStyles.overflow;
+      document.body.style.position = previousBodyStyles.position;
+      document.body.style.top = previousBodyStyles.top;
+      document.body.style.width = previousBodyStyles.width;
       window.removeEventListener("keydown", onKeyDown);
-      previousFocusedElement?.focus();
+      window.scrollTo(0, scrollY);
+      previousFocusedElement?.focus({ preventScroll: true });
     };
   }, [modal]);
 
