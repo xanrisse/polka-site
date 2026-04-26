@@ -5353,3 +5353,150 @@ h1 span {
     margin-top: 2px;
   }
 }
+
+@media (max-width: 760px) {
+  .book-snow {
+    display: none;
+  }
+
+  .floating-nav {
+    bottom: max(8px, env(safe-area-inset-bottom));
+    padding: 6px;
+  }
+
+  .nav-dot {
+    width: 32px;
+    height: 32px;
+  }
+
+  .visual-stage-collection {
+    border-radius: 28px;
+    background:
+      linear-gradient(160deg, rgba(255, 247, 232, 0.08), rgba(255, 247, 232, 0.035)),
+      rgba(18, 13, 9, 0.78);
+  }
+
+  .visual-stage-collection .collection-visual {
+    padding: 16px;
+  }
+
+  .visual-stage-collection .collection-card {
+    display: grid;
+    gap: 16px;
+    padding: 22px 20px;
+    border-radius: 26px;
+  }
+
+  .visual-stage-collection .collection-card p,
+  .visual-stage-collection .collection-card h3 {
+    margin: 0;
+  }
+
+  .visual-stage-collection .collection-card h3 {
+    font-size: 30px;
+    line-height: 1.12;
+  }
+
+  .visual-stage-collection .collection-books {
+    margin: 0;
+    align-items: end;
+  }
+
+  .visual-stage-collection .collection-books span {
+    min-height: 96px;
+  }
+
+  .visual-stage-collection .comment-stream span {
+    display: none;
+  }
+
+  .visual-stage-collection .comment-stream span:last-child {
+    display: block;
+  }
+
+  .visual-stage-collection .carousel-controls {
+    justify-content: flex-start;
+  }
+
+  .visual-stage-collection .carousel-controls button {
+    width: 46px;
+    height: 46px;
+  }
+
+  .catalog-section {
+    padding-bottom: max(160px, calc(env(safe-area-inset-bottom) + 132px));
+  }
+
+  .book-catalog-grid {
+    gap: 18px;
+  }
+
+  .catalog-book-card {
+    border-radius: 28px;
+  }
+
+  .catalog-book-surface {
+    grid-template-rows: auto;
+  }
+
+  .catalog-book-card .generated-book-cover {
+    height: 218px;
+    margin: 16px;
+    padding: 22px 20px;
+    border-radius: 24px;
+  }
+
+  .catalog-book-card:hover .generated-book-cover {
+    transform: none;
+  }
+
+  .catalog-book-card .generated-book-cover strong {
+    max-width: 84%;
+    margin-top: 56px;
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .catalog-book-card .generated-book-cover small {
+    max-width: 86%;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  .catalog-book-card .book-pattern {
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .catalog-book-card .book-pattern i {
+    width: 74px;
+  }
+
+  .catalog-book-info {
+    padding: 0 18px 16px;
+    gap: 12px;
+  }
+
+  .catalog-book-info h3 {
+    font-size: 24px;
+    line-height: 1.08;
+  }
+
+  .catalog-book-info p {
+    font-size: 14px;
+  }
+
+  .catalog-book-blurb {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .book-status-row {
+    padding: 0 18px 18px;
+  }
+
+  .catalog-expand-panel {
+    margin-top: 18px;
+    margin-bottom: 24px;
+  }
+}
