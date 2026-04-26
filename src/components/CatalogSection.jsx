@@ -81,7 +81,6 @@ export default function CatalogSection({ books, onReserveBook }) {
   const visibleBooks = isCatalogExpanded
     ? sortedBooks
     : sortedBooks.slice(0, catalogPreviewLimit);
-  const hiddenBooksCount = Math.max(sortedBooks.length - visibleBooks.length, 0);
   const canToggleCatalog = sortedBooks.length > catalogPreviewLimit;
 
   const resetCatalogFilters = () => {
@@ -217,13 +216,11 @@ export default function CatalogSection({ books, onReserveBook }) {
 
         <div className="catalog-summary" role="status" aria-live="polite">
           <div className="catalog-summary-card">
-            <strong>{visibleBooks.length}</strong>
+            <strong>{sortedBooks.length}</strong>
             <span>
-              {hiddenBooksCount > 0
-                ? "книги показаны сейчас"
-                : sortedBooks.length === books.length
-                  ? "книг в каталоге"
-                  : "книг подходят под текущий запрос"}
+              {sortedBooks.length === books.length
+                ? "книг в каталоге"
+                : "книг подходят под текущий запрос"}
             </span>
           </div>
 
@@ -231,13 +228,6 @@ export default function CatalogSection({ books, onReserveBook }) {
             <strong>{availableBooksCount}</strong>
             <span>можно забрать прямо сейчас</span>
           </div>
-
-          {hiddenBooksCount > 0 && (
-            <div className="catalog-summary-card catalog-summary-muted">
-              <strong>+{hiddenBooksCount}</strong>
-              <span>книг скрыто, чтобы каталог оставался компактным</span>
-            </div>
-          )}
 
           {hasActiveCatalogFilters && (
             <button
@@ -327,21 +317,13 @@ export default function CatalogSection({ books, onReserveBook }) {
 
             {canToggleCatalog && (
               <div className="catalog-expand-panel">
-                <p>
-                  {isCatalogExpanded
-                    ? "Каталог раскрыт полностью. Можно свернуть его обратно до четырёх главных книг."
-                    : `Ещё ${hiddenBooksCount} книг скрыто, чтобы блок не занимал слишком много места.`}
-                </p>
-
                 <button
                   type="button"
                   className="catalog-expand-button"
                   onClick={toggleCatalogExpansion}
                   aria-expanded={isCatalogExpanded}
                 >
-                  {isCatalogExpanded
-                    ? "Свернуть каталог"
-                    : `Показать ещё ${hiddenBooksCount}`}
+                  {isCatalogExpanded ? "Свернуть каталог" : "Показать ещё"}
                 </button>
               </div>
             )}
