@@ -6,29 +6,21 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
   const closeButtonRef = useRef(null);
   const titleId = useId();
   const descriptionId = useId();
-  const requestClose = () => onClose();
-
   useEffect(() => {
     if (!book) return undefined;
 
     const dialog = dialogRef.current;
-    const scrollY = window.scrollY;
     const previousFocusedElement =
       document.activeElement instanceof HTMLElement
         ? document.activeElement
         : null;
-    const previousBodyStyles = {
-      overflow: document.body.style.overflow,
-      position: document.body.style.position,
-      top: document.body.style.top,
-      width: document.body.style.width,
-    };
+    const previousBodyOverflow = document.body.style.overflow;
     const focusableSelector =
       'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     const onKeyDown = (event) => {
       if (event.key === "Escape") {
-        requestClose();
+        onClose();
         return;
       }
 
@@ -54,20 +46,14 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
       }
     };
 
+    // avoid changing body position/top (can cause scroll jump on some browsers)
     document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
     closeButtonRef.current?.focus({ preventScroll: true });
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.body.style.overflow = previousBodyStyles.overflow;
-      document.body.style.position = previousBodyStyles.position;
-      document.body.style.top = previousBodyStyles.top;
-      document.body.style.width = previousBodyStyles.width;
+      document.body.style.overflow = previousBodyOverflow;
       window.removeEventListener("keydown", onKeyDown);
-      window.scrollTo(0, scrollY);
       previousFocusedElement?.focus({ preventScroll: true });
     };
   }, [book]);
