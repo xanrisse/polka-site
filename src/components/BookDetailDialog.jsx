@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useId, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { bookStatusLabels } from "../data/polkaContent.js";
 
 export default function BookDetailDialog({ book, onClose, onReserveBook }) {
@@ -6,7 +6,7 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
   const closeButtonRef = useRef(null);
   const titleId = useId();
   const descriptionId = useId();
-  const requestClose = useEffectEvent(() => onClose());
+  const requestClose = () => onClose();
 
   useEffect(() => {
     if (!book) return undefined;
@@ -165,7 +165,7 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
               <span>Маршрут книги</span>
 
               <div className="book-detail-route-list">
-                {book.route.map((point, index) => (
+                {(book.route ?? []).map((point, index) => (
                   <div key={point} className="book-detail-route-stop">
                     <b>{String(index + 1).padStart(2, "0")}</b>
                     <strong>{point}</strong>
