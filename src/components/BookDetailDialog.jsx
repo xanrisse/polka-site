@@ -4,8 +4,14 @@ import { bookStatusLabels } from "../data/polkaContent.js";
 export default function BookDetailDialog({ book, onClose, onReserveBook }) {
   const dialogRef = useRef(null);
   const closeButtonRef = useRef(null);
+  const onCloseRef = useRef(onClose);
   const titleId = useId();
   const descriptionId = useId();
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
   useEffect(() => {
     if (!book) return undefined;
 
@@ -20,7 +26,7 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
 
     const onKeyDown = (event) => {
       if (event.key === "Escape") {
-        onClose();
+        onCloseRef.current();
         return;
       }
 
@@ -59,7 +65,6 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
   }, [book]);
 
   if (!book) return null;
-  console.log('BookDetailDialog book:', book && book.title);
 
   const statusLabel = bookStatusLabels[book.status] ?? book.status;
   const isAvailable = book.status === "available";

@@ -89,7 +89,6 @@ export default function CatalogSection({ books, onReserveBook }) {
   };
 
   const openBookDetail = (book) => {
-    console.log('openBookDetail', book && book.title);
     startTransition(() => setSelectedBook(book));
   };
 
@@ -301,56 +300,6 @@ export default function CatalogSection({ books, onReserveBook }) {
         onClose={closeBookDetail}
         onReserveBook={reserveFromDetail}
       />
-
-      {selectedBook && (
-        <div className="debug-selected-book" role="status">
-          <div>
-            <strong>DEBUG:</strong> {selectedBook.title}
-          </div>
-          <div style={{ marginTop: 8 }}>
-            <button type="button" onClick={closeBookDetail} className="ghost-btn">
-              Закрыть (debug)
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Bright fallback modal to ensure visibility during debugging */}
-      {selectedBook && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 12000,
-            display: "grid",
-            placeItems: "center",
-            background: "rgba(255,255,255,0.95)",
-            color: "#111",
-            padding: 20,
-          }}
-          onClick={closeBookDetail}
-        >
-          <div
-            style={{
-              maxWidth: 720,
-              width: "100%",
-              background: "#fff",
-              borderRadius: 12,
-              padding: 24,
-              boxShadow: "0 10px 40px rgba(0,0,0,0.2)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 style={{ marginTop: 0 }}>{selectedBook.title}</h3>
-            <p style={{ marginBottom: 12 }}>{selectedBook.annotation}</p>
-            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-              <button type="button" className="ghost-btn" onClick={closeBookDetail}>
-                Закрыть
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

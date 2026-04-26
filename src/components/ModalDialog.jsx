@@ -3,9 +3,13 @@ import { useEffect, useId, useRef } from "react";
 export default function ModalDialog({ modal, onClose }) {
   const modalRef = useRef(null);
   const closeModalButtonRef = useRef(null);
+  const onCloseRef = useRef(onClose);
   const modalTitleId = useId();
   const modalDescriptionId = useId();
-  // call onClose directly when needed
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (!modal) return undefined;
@@ -21,7 +25,7 @@ export default function ModalDialog({ modal, onClose }) {
 
     const onKeyDown = (event) => {
       if (event.key === "Escape") {
-        onClose();
+        onCloseRef.current();
         return;
       }
 
