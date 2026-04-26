@@ -11,10 +11,13 @@ const catalogSortModes = [
   { value: "title", label: "По названию" },
 ];
 
+const catalogPreviewLimit = 4;
+
 export default function CatalogSection({ books, onReserveBook }) {
   const [bookQuery, setBookQuery] = useState("");
   const [bookFilter, setBookFilter] = useState("all");
   const [sortMode, setSortMode] = useState("recommended");
+  const [isCatalogExpanded, setIsCatalogExpanded] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const deferredBookQuery = useDeferredValue(bookQuery);
   const normalizedBookQuery = deferredBookQuery.trim().toLowerCase();
@@ -75,17 +78,25 @@ export default function CatalogSection({ books, onReserveBook }) {
       firstBook.title.localeCompare(secondBook.title, "ru")
     );
   });
+  const visibleBooks = isCatalogExpanded
+    ? sortedBooks
+    : sortedBooks.slice(0, catalogPreviewLimit);
+  const hiddenBooksCount = Math.max(sortedBooks.length - visibleBooks.length, 0);
+  const canToggleCatalog = sortedBooks.length > catalogPreviewLimit;
 
   const resetCatalogFilters = () => {
     startTransition(() => {
       setBookQuery("");
       setBookFilter("all");
       setSortMode("recommended");
+      setIsCatalogExpanded(false);
     });
   };
 
   const applyQuickSearch = (value) => {
     startTransition(() => {
+      setIsCatalogExpanded(false);
+
       if (catalogFilters.some((filter) => filter.value === value)) {
         setBookFilter(value);
         return;
@@ -93,6 +104,31 @@ export default function CatalogSection({ books, onReserveBook }) {
 
       setBookQuery(value);
     });
+  };
+
+  const updateBookQuery = (value) => {
+    startTransition(() => {
+      setBookQuery(value);
+      setIsCatalogExpanded(false);
+    });
+  };
+
+  const updateBookFilter = (value) => {
+    startTransition(() => {
+      setBookFilter(value);
+      setIsCatalogExpanded(false);
+    });
+  };
+
+  const updateSortMode = (value) => {
+    startTransition(() => {
+      setSortMode(value);
+      setIsCatalogExpanded(false);
+    });
+  };
+
+  const toggleCatalogExpansion = () => {
+    startTransition(() => setIsCatalogExpanded((current) => !current));
   };
 
   const openBookDetail = (book) => {
@@ -141,7 +177,7 @@ export default function CatalogSection({ books, onReserveBook }) {
         <div className="catalog-toolbar" data-reveal="up">
           <input
             value={bookQuery}
-            onChange={(event) => setBookQuery(event.target.value)}
+            onChange={(event) => updateBookQuery(event.target.value)}
             placeholder="Поиск: книга, автор или станция"
             aria-label="Поиск по каталогу книг"
           />
@@ -153,7 +189,7 @@ export default function CatalogSection({ books, onReserveBook }) {
                 type="button"
                 className={bookFilter === filter.value ? "active" : ""}
                 aria-pressed={bookFilter === filter.value}
-                onClick={() => setBookFilter(filter.value)}
+                onClick={() => updateBookFilter(filter.value)}
               >
                 {filter.label}
               </button>
@@ -171,7 +207,7 @@ export default function CatalogSection({ books, onReserveBook }) {
                 type="button"
                 className={sortMode === mode.value ? "active" : ""}
                 aria-pressed={sortMode === mode.value}
-                onClick={() => startTransition(() => setSortMode(mode.value))}
+                onClick={() => updateSortMode(mode.value)}
               >
                 {mode.label}
               </button>
@@ -181,11 +217,13 @@ export default function CatalogSection({ books, onReserveBook }) {
 
         <div className="catalog-summary" role="status" aria-live="polite">
           <div className="catalog-summary-card">
-            <strong>{sortedBooks.length}</strong>
+            <strong>{visibleBooks.length}</strong>
             <span>
-              {sortedBooks.length === books.length
-                ? "книг в каталоге"
-                : "книг подходят под текущий запрос"}
+              {hiddenBooksCount > 0
+                ? "книги показаны сейчас"
+                : sortedBooks.length === books.length
+                  ? "книг в каталоге"
+                  : "книг подходят под текущий запрос"}
             </span>
           </div>
 
@@ -193,6 +231,13 @@ export default function CatalogSection({ books, onReserveBook }) {
             <strong>{availableBooksCount}</strong>
             <span>можно забрать прямо сейчас</span>
           </div>
+
+          {hiddenBooksCount > 0 && (
+            <div className="catalog-summary-card catalog-summary-muted">
+              <strong>+{hiddenBooksCount}</strong>
+              <span>книг скрыто, чтобы каталог оставался компактным</span>
+            </div>
+          )}
 
           {hasActiveCatalogFilters && (
             <button
@@ -206,79 +251,101 @@ export default function CatalogSection({ books, onReserveBook }) {
         </div>
 
         {sortedBooks.length > 0 ? (
-          <div className="book-catalog-grid">
-            {sortedBooks.map((book, index) => (
-              <article
-                key={book.id}
-                className="catalog-book-card"
-                data-reveal="up"
-                style={{ "--reveal-delay": `${(index % 5) * 85}ms` }}
-              >
+          <>
+            <div className="book-catalog-grid">
+              {visibleBooks.map((book, index) => (
+                <article
+                  key={book.id}
+                  className="catalog-book-card"
+                  style={{ "--reveal-delay": `${(index % 5) * 85}ms` }}
+                >
+                  <button
+                    type="button"
+                    className="catalog-book-surface"
+                    onClick={() => openBookDetail(book)}
+                    aria-label={`Открыть страницу книги ${book.title}`}
+                  >
+                    <div className={`generated-book-cover generated-${book.color}`}>
+                      <div className="book-shine" />
+                      <div className="book-spine-mini" />
+                      <span className="book-genre">{book.genre}</span>
+                      <strong>{book.title}</strong>
+                      <small>{book.author}</small>
+                      <div className="book-pattern">
+                        <i />
+                        <i />
+                        <i />
+                      </div>
+                    </div>
+
+                    <div className="catalog-book-info">
+                      <div>
+                        <h3>{book.title}</h3>
+                        <p>{book.author}</p>
+                      </div>
+
+                      <div className="book-meta">
+                        <span>{book.station}</span>
+                        <span>Состояние: {book.condition}</span>
+                        <span>
+                          {book.year} · {book.pages}
+                        </span>
+                      </div>
+
+                      <p className="catalog-book-blurb">{book.annotation}</p>
+                    </div>
+                  </button>
+
+                  <div className="book-status-row">
+                    <span className={`book-status status-${book.status}`}>
+                      {bookStatusLabels[book.status] ?? book.status}
+                    </span>
+
+                    <div className="catalog-book-actions">
+                      <button
+                        type="button"
+                        className="catalog-book-link"
+                        onClick={() => openBookDetail(book)}
+                      >
+                        Открыть страницу
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={book.status !== "available"}
+                        onClick={() => onReserveBook(book)}
+                      >
+                        {book.status === "available"
+                          ? "Забронировать"
+                          : "Недоступна"}
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {canToggleCatalog && (
+              <div className="catalog-expand-panel">
+                <p>
+                  {isCatalogExpanded
+                    ? "Каталог раскрыт полностью. Можно свернуть его обратно до четырёх главных книг."
+                    : `Ещё ${hiddenBooksCount} книг скрыто, чтобы блок не занимал слишком много места.`}
+                </p>
+
                 <button
                   type="button"
-                  className="catalog-book-surface"
-                  onClick={() => openBookDetail(book)}
-                  aria-label={`Открыть страницу книги ${book.title}`}
+                  className="catalog-expand-button"
+                  onClick={toggleCatalogExpansion}
+                  aria-expanded={isCatalogExpanded}
                 >
-                  <div className={`generated-book-cover generated-${book.color}`}>
-                    <div className="book-shine" />
-                    <div className="book-spine-mini" />
-                    <span className="book-genre">{book.genre}</span>
-                    <strong>{book.title}</strong>
-                    <small>{book.author}</small>
-                    <div className="book-pattern">
-                      <i />
-                      <i />
-                      <i />
-                    </div>
-                  </div>
-
-                  <div className="catalog-book-info">
-                    <div>
-                      <h3>{book.title}</h3>
-                      <p>{book.author}</p>
-                    </div>
-
-                    <div className="book-meta">
-                      <span>{book.station}</span>
-                      <span>Состояние: {book.condition}</span>
-                      <span>
-                        {book.year} · {book.pages}
-                      </span>
-                    </div>
-
-                    <p className="catalog-book-blurb">{book.annotation}</p>
-                  </div>
+                  {isCatalogExpanded
+                    ? "Свернуть каталог"
+                    : `Показать ещё ${hiddenBooksCount}`}
                 </button>
-
-                <div className="book-status-row">
-                  <span className={`book-status status-${book.status}`}>
-                    {bookStatusLabels[book.status] ?? book.status}
-                  </span>
-
-                  <div className="catalog-book-actions">
-                    <button
-                      type="button"
-                      className="catalog-book-link"
-                      onClick={() => openBookDetail(book)}
-                    >
-                      Открыть страницу
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={book.status !== "available"}
-                      onClick={() => onReserveBook(book)}
-                    >
-                      {book.status === "available"
-                        ? "Забронировать"
-                        : "Недоступна"}
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+              </div>
+            )}
+          </>
         ) : (
           <div className="catalog-empty" data-reveal="scale">
             <strong>Совпадений пока нет</strong>

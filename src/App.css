@@ -2678,6 +2678,15 @@ h1 span {
   font-weight: 800;
 }
 
+.catalog-summary-muted {
+  background:
+    linear-gradient(160deg, rgba(255, 247, 232, 0.055), rgba(255, 247, 232, 0.025));
+}
+
+.catalog-summary-muted strong {
+  color: var(--page-accent);
+}
+
 .catalog-reset {
   margin-left: auto;
   min-height: 54px;
@@ -2722,6 +2731,51 @@ h1 span {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 22px;
+}
+
+.catalog-expand-panel {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 22px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 247, 232, 0.12);
+  border-radius: 26px;
+  background:
+    linear-gradient(135deg, rgba(255, 247, 232, 0.08), rgba(255, 247, 232, 0.035)),
+    radial-gradient(circle at 88% 50%, rgb(var(--page-accent-rgb) / 0.16), transparent 28%);
+}
+
+.catalog-expand-panel p {
+  margin: 0;
+  max-width: 680px;
+  color: rgba(255, 247, 232, 0.7);
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.catalog-expand-button {
+  flex: 0 0 auto;
+  min-height: 50px;
+  padding: 0 22px;
+  border: 1px solid rgba(255, 247, 232, 0.14);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgb(var(--page-accent-rgb) / 0.95), rgb(var(--page-support-rgb) / 0.82));
+  color: #1c120a;
+  font: inherit;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 18px 42px rgb(var(--page-accent-rgb) / 0.24);
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.catalog-expand-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 54px rgb(var(--page-accent-rgb) / 0.3);
 }
 
 .catalog-book-card {
@@ -2982,6 +3036,16 @@ h1 span {
 
   .catalog-summary-card,
   .catalog-reset {
+    width: 100%;
+  }
+
+  .catalog-expand-panel {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 22px;
+  }
+
+  .catalog-expand-button {
     width: 100%;
   }
 
@@ -3614,6 +3678,7 @@ h3,
 .catalog-quick-pick,
 .catalog-sort-pills button,
 .catalog-reset,
+.catalog-expand-button,
 .faq-item,
 .catalog-book-card,
 .partner-grid div,
@@ -4372,6 +4437,7 @@ h1 span {
 
 .catalog-toolbar input:focus-visible,
 .catalog-reset:focus-visible,
+.catalog-expand-button:focus-visible,
 .catalog-quick-pick:focus-visible,
 .catalog-sort-pills button:focus-visible,
 .catalog-filters button:focus-visible,
