@@ -1377,3 +1377,227 @@ h1 span {
     display: none;
   }
 }
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 24px;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(240, 179, 91, 0.22), transparent 34%),
+    #120f0b;
+  animation: preloaderExit 1.2s ease forwards;
+  animation-delay: 0.85s;
+}
+
+.preloader p {
+  margin: 0;
+  color: var(--paper);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.preloader-book {
+  position: relative;
+  width: 96px;
+  height: 72px;
+  perspective: 600px;
+}
+
+.preloader-book span {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px 18px 18px 10px;
+  background: linear-gradient(135deg, #f0b35b, #7a4d2c);
+  transform-origin: left center;
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.35);
+}
+
+.preloader-book span:nth-child(1) {
+  animation: pageFlip 1.15s ease-in-out infinite;
+}
+
+.preloader-book span:nth-child(2) {
+  transform: translateX(10px) scale(0.96);
+  background: linear-gradient(135deg, #f4ead8, #d8bd8e);
+  animation: pageFlip 1.15s ease-in-out infinite;
+  animation-delay: 0.16s;
+}
+
+.preloader-book span:nth-child(3) {
+  transform: translateX(20px) scale(0.92);
+  background: linear-gradient(135deg, #78d5a4, #2f6b48);
+  animation: pageFlip 1.15s ease-in-out infinite;
+  animation-delay: 0.32s;
+}
+
+.cursor-light {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at var(--x) var(--y),
+      rgba(240, 179, 91, 0.16),
+      transparent 28%
+    );
+  mix-blend-mode: screen;
+}
+
+.scroll-progress {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 247, 232, 0.08);
+}
+
+.scroll-progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #f0b35b, #78d5a4, #8bbcff);
+  box-shadow: 0 0 18px rgba(240, 179, 91, 0.65);
+}
+
+.floating-book {
+  position: fixed;
+  z-index: 1;
+  right: 5vw;
+  top: 18vh;
+  width: 54px;
+  height: 76px;
+  border-radius: 8px 15px 15px 8px;
+  background: linear-gradient(135deg, #f0b35b, #7a4d2c);
+  opacity: 0.42;
+  pointer-events: none;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  animation: floatingBook 7s ease-in-out infinite;
+}
+
+.site-shell {
+  position: relative;
+  z-index: 2;
+}
+
+.journey-section,
+.hero-card,
+.visual-stage,
+.download-card,
+.large-map {
+  animation: revealSoft linear both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 32%;
+}
+
+.primary-btn,
+.ghost-btn,
+.store-btn,
+.route-point,
+.nav-dot {
+  position: relative;
+  overflow: hidden;
+}
+
+.primary-btn::after,
+.ghost-btn::after,
+.store-btn::after,
+.route-point::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  transform: translateX(-120%);
+  transition: 0.6s ease;
+}
+
+.primary-btn:hover::after,
+.ghost-btn:hover::after,
+.store-btn:hover::after,
+.route-point:hover::after {
+  transform: translateX(120%);
+}
+
+@keyframes pageFlip {
+  0%,
+  100% {
+    transform: rotateY(0deg) translateX(0);
+  }
+
+  50% {
+    transform: rotateY(-42deg) translateX(4px);
+  }
+}
+
+@keyframes preloaderExit {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  99% {
+    opacity: 0;
+    visibility: visible;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes floatingBook {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-8deg);
+  }
+
+  50% {
+    transform: translateY(34px) rotate(7deg);
+  }
+}
+
+@keyframes revealSoft {
+  from {
+    opacity: 0;
+    transform: translateY(44px) scale(0.98);
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (max-width: 760px) {
+  .cursor-light,
+  .floating-book {
+    display: none;
+  }
+
+  .preloader-book {
+    width: 78px;
+    height: 58px;
+  }
+
+  .journey-section,
+  .hero-card,
+  .visual-stage,
+  .download-card,
+  .large-map {
+    animation: none;
+  }
+}
