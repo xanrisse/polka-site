@@ -1,214 +1,24 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import MoscowMap from "./components/MoscowMap.jsx";
+import { startTransition, useEffect, useMemo, useRef, useState } from "react";
+import CatalogSection from "./components/CatalogSection.jsx";
+import DeferredMoscowMap from "./components/DeferredMoscowMap.jsx";
+import ModalDialog from "./components/ModalDialog.jsx";
+import {
+  catalogBooks,
+  collections,
+  coreValues,
+  faq,
+  journey,
+  missionStatement,
+  modalContent,
+  resourceLinks,
+  serviceActions,
+} from "./data/polkaContent.js";
 import "./App.css";
 
-const journey = [
-  {
-    id: "forgotten",
-    step: "01",
-    label: "Забытая",
-    kicker: "Этап 1",
-    title: "Забытая на полке",
-    subtitle:
-      "Эту книгу купили три года назад. Прочитали один раз. И она осталась пылиться между «Войной и миром» и забытым детективом.",
-    text:
-      "Таких книг в Москве — тысячи. Они ждут, когда их заметят. «Полка» даёт им второй шанс.",
-    stat: "67%",
-    statText: "книг в домашних библиотеках не перечитываются и не передаются дальше",
-    visualTitle: "Эта книга ждала 3 года",
-    tone: "warm",
-  },
-  {
-    id: "bookbox",
-    step: "02",
-    label: "Книгомат",
-    kicker: "Этап 2",
-    title: "Первый шаг — книгомат",
-    subtitle:
-      "Хозяин книги решил: пусть путешествует. Он отнёс её в книгомат на Павелецкой.",
-    text:
-      "Через 5 минут книга появляется в приложении, а через час приходит уведомление: «Кто-то её уже рассматривает».",
-    stat: "342",
-    statText: "книгомата по Москве — книга всегда рядом",
-    visualTitle: "Павелецкая · активная точка",
-    tone: "green",
-  },
-  {
-    id: "review",
-    step: "03",
-    label: "Отзыв",
-    kicker: "Этап 3",
-    title: "Первый читатель. Первый отзыв",
-    subtitle:
-      "Аня нашла книгу в книгомате на Павелецкой. Она давно искала это издание.",
-    text:
-      "Прочитала за два вечера и оставила отзыв. Книга продолжила путь, а у Ани появилась новая любимая история.",
-    stat: "4 500+",
-    statText: "отзывов оставлено пользователями «Полки»",
-    visualTitle: "Карточка книги · отзыв Ани",
-    tone: "blue",
-  },
-  {
-    id: "collection",
-    step: "04",
-    label: "Подборка",
-    kicker: "Этап 4",
-    title: "Книга в подборке. Новое знакомство",
-    subtitle:
-      "Книга попала в подборку Ани «Что меня тронуло в этом месяце». Её увидели 47 человек.",
-    text:
-      "Двое написали Ане спасибо. Подборки в «Полке» — это не просто списки, а повод найти человека, который понимает тебя.",
-    stat: "15 000",
-    statText: "активных пользователей в читательском сообществе",
-    visualTitle: "Подборка месяца",
-    tone: "violet",
-  },
-  {
-    id: "author",
-    step: "05",
-    label: "Автор",
-    kicker: "Этап 5",
-    title: "Книга вдохновляет автора",
-    subtitle:
-      "Дмитрий прочитал книгу по совету из подборки Ани. Через неделю он опубликовал на «Полке» свой рассказ.",
-    text:
-      "Рассказ уже прочитали 89 человек. Книга не просто путешествует — она меняет людей.",
-    stat: "89",
-    statText: "авторов уже нашли своих читателей",
-    visualTitle: "Рассказ «Сосед»",
-    tone: "orange",
-  },
-];
-
-const bookPoints = [
-  { name: "Павелецкая", x: 64, y: 58, status: "Книга добавлена" },
-  { name: "Курский вокзал", x: 72, y: 42, status: "Книга ждёт читателя" },
-  { name: "Таганская", x: 55, y: 48, status: "12 книг в движении" },
-  { name: "Арбатская", x: 42, y: 38, status: "Новая подборка" },
-  { name: "ВДНХ", x: 61, y: 22, status: "Авторская полка" },
-];
-
-const collections = [
-  "Что меня тронуло в этом месяце",
-  "Книги, после которых хочется идти пешком",
-  "Истории для дождливого вечера",
-  "Маленькие книги с большим послевкусием",
-];
-const serviceActions = [
-  {
-    title: "Найти книгу рядом",
-    text: "Открой карту книгоматов, выбери точку и посмотри, какие книги доступны сейчас.",
-    button: "Открыть карту",
-    target: "live-map",
-  },
-  {
-    title: "Оставить свою книгу",
-    text: "Подготовь книгу, выбери ближайший книгомат и передай её следующему читателю.",
-    button: "Инструкция",
-    target: "guide",
-  },
-  {
-    title: "Стать автором",
-    text: "Опубликуй рассказ, эссе или подборку — читатели смогут найти твой текст в приложении.",
-    button: "Для авторов",
-    target: "authors",
-  },
-  {
-    title: "Подключить площадку",
-    text: "Кафе, вуз, библиотека или коворкинг могут стать новой точкой книжного обмена.",
-    button: "Партнёрам",
-    target: "partners",
-  },
-];
-
-const faq = [
-  {
-    q: "Книгу можно забрать бесплатно?",
-    a: "Да. Логика сервиса — обмен и движение книг. Пользователь может взять книгу, прочитать и вернуть её в любой книгомат.",
-  },
-  {
-    q: "Что делать с плохим состоянием книги?",
-    a: "Перед передачей книга проходит базовую проверку: целые страницы, нет плесени, сильных загрязнений и повреждений.",
-  },
-  {
-    q: "Можно ли отслеживать путь книги?",
-    a: "Да. У книги появляется история перемещений: где её оставили, кто взял, где появился отзыв или подборка.",
-  },
-  {
-    q: "Можно ли публиковать свои тексты?",
-    a: "Да. В «Полке» есть авторский раздел: можно опубликовать рассказ, получить отзывы и попасть в печатную мини-подборку.",
-  },
-];
-
-const resourceLinks = [
-  {
-    label: "Инструкция: как оставить книгу",
-    href: "https://www.google.com/search?q=как+подготовить+книгу+к+буккроссингу",
-  },
-  {
-    label: "Что такое буккроссинг",
-    href: "https://ru.wikipedia.org/wiki/Буккроссинг",
-  },
-  {
-    label: "Карта библиотек Москвы",
-    href: "https://www.mos.ru/map/",
-  },
-  {
-    label: "Написать команде",
-    href: "mailto:hello@polka.example",
-  },
-];
-const catalogBooks = [
-  {
-    id: 1,
-    title: "Маленький принц",
-    author: "Антуан де Сент-Экзюпери",
-    genre: "Проза",
-    station: "Курский вокзал",
-    status: "available",
-    condition: "хорошее",
-    color: "gold",
-  },
-  {
-    id: 2,
-    title: "451 градус по Фаренгейту",
-    author: "Рэй Брэдбери",
-    genre: "Фантастика",
-    station: "Павелецкая",
-    status: "available",
-    condition: "отличное",
-    color: "red",
-  },
-  {
-    id: 3,
-    title: "Норвежский лес",
-    author: "Харуки Мураками",
-    genre: "Роман",
-    station: "Арбатская",
-    status: "reserved",
-    condition: "хорошее",
-    color: "green",
-  },
-  {
-    id: 4,
-    title: "Письма к молодому поэту",
-    author: "Райнер Мария Рильке",
-    genre: "Эссе",
-    station: "Таганская",
-    status: "available",
-    condition: "новое",
-    color: "blue",
-  },
-  {
-    id: 5,
-    title: "Солярис",
-    author: "Станислав Лем",
-    genre: "Фантастика",
-    station: "ВДНХ",
-    status: "moving",
-    condition: "хорошее",
-    color: "violet",
-  },
+const heroSignals = [
+  "Маршруты книг по городу",
+  "Читательские подборки",
+  "Первые публикации авторов",
 ];
 
 function useActiveSection(ids) {
@@ -279,6 +89,22 @@ function Counter({ value, suffix = "" }) {
   );
 }
 
+function usePrefersReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setPrefersReducedMotion(media.matches);
+
+    updatePreference();
+    media.addEventListener("change", updatePreference);
+
+    return () => media.removeEventListener("change", updatePreference);
+  }, []);
+
+  return prefersReducedMotion;
+}
+
 function scrollToId(id) {
   document.getElementById(id)?.scrollIntoView({
     behavior: "smooth",
@@ -289,93 +115,48 @@ function scrollToId(id) {
 export default function App() {
   const ids = useMemo(() => journey.map((item) => item.id), []);
   const activeSection = useActiveSection(ids);
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const coreValueByKey = useMemo(
+    () => Object.fromEntries(coreValues.map((value) => [value.key, value])),
+    []
+  );
+  const activeJourneyItem =
+    journey.find((item) => item.id === activeSection) ?? journey[0];
+  const activeCoreValue =
+    coreValueByKey[activeJourneyItem.valueKey] ?? coreValues[0];
+  const activeThemeClass = `theme-${activeJourneyItem.tone}`;
 
   const [collectionIndex, setCollectionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [cursor, setCursor] = useState({ x: 50, y: 50 });
   const [modal, setModal] = useState(null);
-  const [bookQuery, setBookQuery] = useState("");
-const [bookFilter, setBookFilter] = useState("all");
 
-const filteredBooks = catalogBooks.filter((book) => {
-  const query = bookQuery.toLowerCase();
+  const shiftCollection = (direction) => {
+    startTransition(() => {
+      setCollectionIndex((prev) => {
+        if (direction < 0) {
+          return prev === 0 ? collections.length - 1 : prev - 1;
+        }
 
-  const matchesQuery =
-    book.title.toLowerCase().includes(query) ||
-    book.author.toLowerCase().includes(query) ||
-    book.station.toLowerCase().includes(query);
-
-  const matchesFilter =
-    bookFilter === "all" ||
-    book.genre === bookFilter ||
-    book.status === bookFilter;
-
-  return matchesQuery && matchesFilter;
-});
-
-const reserveBook = (book) => {
-  setModal({
-    title: `Бронь: ${book.title}`,
-    text: `Книга будет ждать тебя в книгомате «${book.station}». Код брони: POLKA-${book.id}42. В реальном приложении бронь действовала бы 30 минут.`,
-    button: "Понятно",
-  });
-};
-
-const openModal = (type) => {
-  const content = {
-    story: {
-      title: "Фрагмент рассказа «Сосед»",
-      text:
-        "Он жил за стеной так тихо, будто боялся помешать чужим жизням. Но однажды на лестничной клетке появилась книга с запиской: «Если дочитаешь — оставь следующему».",
-      button: "Закрыть",
-    },
-    findBook: {
-      title: "Найти эту книгу",
-      text:
-        "В реальном приложении здесь открылся бы экран книги и ближайший книгомат. В прототипе можно перейти к карте и выбрать точку.",
-      button: "Понятно",
-    },
-    leaveBook: {
-      title: "Оставить свою книгу",
-      text:
-        "Проверь состояние книги, выбери ближайший книгомат, отсканируй QR-код и положи книгу в свободную ячейку.",
-      button: "Хорошо",
-    },
-    appStore: {
-      title: "App Store",
-      text:
-        "Здесь будет ссылка на приложение «Полка» в App Store. Пока это интерактивный прототип.",
-      button: "Закрыть",
-    },
-    googlePlay: {
-      title: "Google Play",
-      text:
-        "Здесь будет ссылка на приложение «Полка» в Google Play. Пока это интерактивный прототип.",
-      button: "Закрыть",
-    },
-    authorSubmit: {
-      title: "Подать текст",
-      text:
-        "Автор загружает рассказ, проходит модерацию и получает первые отзывы от читателей «Полки».",
-      button: "Закрыть",
-    },
-    partner: {
-      title: "Стать площадкой",
-      text:
-        "Кафе, вуз, библиотека или офис могут разместить книгомат и стать частью городской книжной сети.",
-      button: "Закрыть",
-    },
-    presentation: {
-      title: "Презентация проекта",
-      text:
-        "В реальном сервисе здесь скачивался бы PDF для партнёров: механика, аудитория, условия подключения и примеры точек.",
-      button: "Закрыть",
-    },
+        return prev === collections.length - 1 ? 0 : prev + 1;
+      });
+    });
   };
 
-  setModal(content[type]);
-};
+  const reserveBook = (book) => {
+    setModal({
+      title: `Бронь: ${book.title}`,
+      text: `Книга будет ждать тебя в книгомате «${book.station}». Код брони: POLKA-${book.id}42. В реальном приложении бронь действовала бы 30 минут.`,
+      button: "Понятно",
+    });
+  };
+
+  const closeModal = () => setModal(null);
+
+  const openModal = (type) => {
+    setModal(modalContent[type]);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1200);
@@ -383,6 +164,52 @@ const openModal = (type) => {
   }, []);
 
   useEffect(() => {
+    const revealNodes = Array.from(document.querySelectorAll("[data-reveal]"));
+
+    if (revealNodes.length === 0) return undefined;
+
+    if (prefersReducedMotion) {
+      revealNodes.forEach((node) => node.classList.add("is-visible"));
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0.16,
+        rootMargin: "0px 0px -8% 0px",
+      }
+    );
+
+    revealNodes.forEach((node, index) => {
+      node.style.setProperty("--reveal-delay", `${(index % 6) * 90}ms`);
+      observer.observe(node);
+    });
+
+    return () => observer.disconnect();
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    if (prefersReducedMotion || activeSection !== "collection") return undefined;
+
+    const timer = window.setInterval(() => {
+      shiftCollection(1);
+    }, 4200);
+
+    return () => window.clearInterval(timer);
+  }, [activeSection, prefersReducedMotion]);
+
+  useEffect(() => {
+    let frameId = null;
+    const supportsPointerTracking = window.matchMedia("(pointer: fine)").matches;
+
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const progress = max > 0 ? (window.scrollY / max) * 100 : 0;
@@ -390,22 +217,34 @@ const openModal = (type) => {
     };
 
     const onMove = (event) => {
-      setCursor({
+      if (prefersReducedMotion || !supportsPointerTracking || frameId) return;
+
+      const nextCursor = {
         x: (event.clientX / window.innerWidth) * 100,
         y: (event.clientY / window.innerHeight) * 100,
+      };
+
+      frameId = requestAnimationFrame(() => {
+        setCursor(nextCursor);
+        frameId = null;
       });
     };
 
-    window.addEventListener("scroll", onScroll);
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    if (!prefersReducedMotion && supportsPointerTracking) {
+      window.addEventListener("mousemove", onMove);
+    }
 
     onScroll();
 
     return () => {
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("mousemove", onMove);
+      if (!prefersReducedMotion && supportsPointerTracking) {
+        window.removeEventListener("mousemove", onMove);
+      }
+      if (frameId) cancelAnimationFrame(frameId);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <>
@@ -420,49 +259,55 @@ const openModal = (type) => {
         </div>
       )}
 
-      <div
-        className="cursor-light"
-        style={{
-          "--x": `${cursor.x}%`,
-          "--y": `${cursor.y}%`,
-        }}
-      />
+      {!prefersReducedMotion && (
+        <div className="book-snow" aria-hidden="true">
+          {Array.from({ length: 32 }).map((_, index) => (
+            <span
+              key={index}
+              className="snow-book-fall"
+              style={{
+                "--x": `${(index * 29 + 7) % 100}%`,
+                "--delay": `${(index % 16) * -2.6}s`,
+                "--duration": `${34 + (index % 10) * 3.8}s`,
+              }}
+            >
+              <i
+                className={`snow-book snow-book-${index % 6}`}
+                style={{
+                  "--drift": `${index % 2 === 0 ? 1 : -1}`,
+                  "--scale": `${0.72 + (index % 6) * 0.09}`,
+                  "--depth": `${0.22 + (index % 5) * 0.11}`,
+                  "--tilt": `${-22 + (index % 9) * 6}deg`,
+                }}
+              >
+                <i className="book-front" />
+                <i className="book-pages" />
+                <i className="book-spine-snow" />
+                <b />
+              </i>
+            </span>
+          ))}
+        </div>
+      )}
 
-      <div className="scroll-progress">
-        <span style={{ width: `${scrollProgress}%` }} />
-      </div>
+      <main className={`site-shell ${activeThemeClass}`}>
+        {!prefersReducedMotion && (
+          <div
+            className="cursor-light"
+            style={{
+              "--x": `${cursor.x}%`,
+              "--y": `${cursor.y}%`,
+            }}
+          />
+        )}
 
-      <div className="floating-book" />
-      <div className="book-snow" aria-hidden="true">
-  {Array.from({ length: 32 }).map((_, index) => (
-    <span
-      key={index}
-      className="snow-book-fall"
-      style={{
-        "--x": `${(index * 29 + 7) % 100}%`,
-        "--delay": `${(index % 16) * -2.6}s`,
-        "--duration": `${34 + (index % 10) * 3.8}s`,
-      }}
-    >
-      <i
-        className={`snow-book snow-book-${index % 6}`}
-        style={{
-          "--drift": `${index % 2 === 0 ? 1 : -1}`,
-          "--scale": `${0.72 + (index % 6) * 0.09}`,
-          "--depth": `${0.22 + (index % 5) * 0.11}`,
-          "--tilt": `${-22 + (index % 9) * 6}deg`,
-        }}
-      >
-        <i className="book-front" />
-        <i className="book-pages" />
-        <i className="book-spine-snow" />
-        <b />
-      </i>
-    </span>
-  ))}
-</div>
+        <div className="scroll-progress">
+          <span style={{ width: `${scrollProgress}%` }} />
+        </div>
 
-      <main className="site-shell">
+        <div className="floating-book" />
+        <div className="site-noise" aria-hidden="true" />
+
         <nav className="floating-nav">
           <button onClick={() => scrollToId("hero")} className="brand-mark">
             Полка
@@ -475,6 +320,7 @@ const openModal = (type) => {
                 onClick={() => scrollToId(item.id)}
                 className={`nav-dot ${activeSection === item.id ? "active" : ""}`}
                 aria-label={item.title}
+                data-label={item.label}
               >
                 <span>{item.step}</span>
               </button>
@@ -489,9 +335,18 @@ const openModal = (type) => {
         <section id="hero" className="hero section">
           <div className="hero-bg-orbit orbit-one" />
           <div className="hero-bg-orbit orbit-two" />
+          <div className="hero-bg-orbit orbit-three" />
 
           <div className="hero-grid">
-            <div className="hero-copy">
+            <div className="hero-copy" data-reveal="up">
+              <div className="hero-status-line">
+                <span className="hero-status-dot" />
+                <p>История в движении</p>
+                <strong>
+                  {activeJourneyItem.kicker} · {activeJourneyItem.label}
+                </strong>
+              </div>
+
               <p className="eyebrow">городская экосистема для книг</p>
 
               <h1>
@@ -517,8 +372,22 @@ const openModal = (type) => {
                   К карте книгоматов
                 </button>
                 <button onClick={() => scrollToId("catalog")} className="ghost-btn">
-  Смотреть книги
-</button>
+                  Смотреть книги
+                </button>
+              </div>
+
+              <div className="hero-signal-row">
+                {heroSignals.map((signal) => (
+                  <span key={signal} className="hero-signal-pill">
+                    {signal}
+                  </span>
+                ))}
+              </div>
+
+              <div className="hero-editorial-card" data-reveal="up">
+                <span>Ценность маршрута сейчас</span>
+                <strong>{activeCoreValue.title}</strong>
+                <p>{activeCoreValue.text}</p>
               </div>
 
               <div className="trust-row">
@@ -539,7 +408,13 @@ const openModal = (type) => {
               </div>
             </div>
 
-            <div className="hero-card">
+            <div className="hero-card" data-reveal="scale">
+              <div className="hero-story-pulse">
+                <span>Сейчас на сцене</span>
+                <strong>{activeJourneyItem.title}</strong>
+                <p>{activeJourneyItem.visualTitle}</p>
+              </div>
+
               <div className="book-cover">
                 <span className="book-spine" />
 
@@ -567,155 +442,224 @@ const openModal = (type) => {
           </div>
         </section>
 
-        <section className="intro-strip">
+        <section className="intro-strip" data-reveal="fade">
           <p>
             «Полка» не придумывает истории — она собирает реальные движения книг,
             отзывы читателей и новые авторские тексты.
           </p>
         </section>
 
-        {journey.map((item, index) => (
-          <section
-            id={item.id}
-            key={item.id}
-            className={`journey-section section tone-${item.tone}`}
-          >
-            <div className="section-number">{item.step}</div>
+        <section id="mission" className="section manifesto-section">
+          <div className="manifesto-shell">
+            <div className="manifesto-copy" data-reveal="left">
+              <p className="eyebrow">миссия и ценности</p>
+              <h2>«Полка» делает литературу живой частью городского ритма</h2>
+              <p className="manifesto-lead">{missionStatement}</p>
 
-            <div className="journey-copy">
-              <p className="eyebrow">{item.kicker}</p>
-              <h2>{item.title}</h2>
-              <p className="section-subtitle">{item.subtitle}</p>
-              <p className="section-text">{item.text}</p>
-
-              <div className="stat-card">
-                <strong>{item.stat}</strong>
-                <span>{item.statText}</span>
+              <div className="manifesto-note">
+                <span>Почему это важно</span>
+                <p>
+                  Для нас книга — не объект хранения, а повод для движения,
+                  разговора, доверия и личного культурного роста.
+                </p>
               </div>
             </div>
 
-            <div className="visual-stage">
-              {index === 0 && (
-                <div className="forgotten-visual">
-                  <div className="dust-light" />
-
-                  <div className="book-stack">
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-
-                  <div className="hover-note">{item.visualTitle}</div>
-                </div>
-              )}
-
-              {index === 1 && (
-  <div className="kiosk-visual">
-    <MoscowMap />
-
-    <div className="kiosk-card">
-      <span className="scan-line" />
-      <strong>Книгомат</strong>
-      <p>Книга добавлена в приложение</p>
-      <small>00:05 после загрузки</small>
-    </div>
-  </div>
-)}
-
-              {index === 2 && (
-                <div className="app-visual">
-                  <div className="phone-card">
-                    <div className="phone-header" />
-
-                    <div className="book-row">
-                      <div className="tiny-cover" />
-                      <div>
-                        <strong>Найденная книга</strong>
-                        <span>Павелецкая → Курский вокзал</span>
-                      </div>
-                    </div>
-
-                    <div className="review-bubble">
-                      «Давно искала это издание. Оставляю книгу дальше — пусть
-                      едет».
-                    </div>
-
-                    <div className="profile-chip">
-                      <span>А</span>
-                      <div>
-                        <strong>Аня</strong>
-                        <small>17 отзывов · 4 подборки</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {index === 3 && (
-                <div className="collection-visual">
-                  <div className="collection-card">
-                    <p>подборка</p>
-                    <h3>{collections[collectionIndex]}</h3>
-
-                    <div className="collection-books">
-                      <span />
-                      <span />
-                      <span />
-                    </div>
-                  </div>
-
-                  <div className="comment-stream">
-                    <span>Спасибо, я тоже её прочитал</span>
-                    <span>Добавил себе в список</span>
-                    <span>У нас похожий вкус</span>
-                  </div>
-
-                  <div className="carousel-controls">
-                    <button
-                      onClick={() =>
-                        setCollectionIndex((prev) =>
-                          prev === 0 ? collections.length - 1 : prev - 1
-                        )
-                      }
-                    >
-                      ←
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        setCollectionIndex((prev) =>
-                          prev === collections.length - 1 ? 0 : prev + 1
-                        )
-                      }
-                    >
-                      →
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {index === 4 && (
-                <div className="author-visual">
-                  <div className="quote-panel">
-                    <p>«Третья страница — это я сама год назад. Спасибо»</p>
-                    <span>отзыв читательницы</span>
-                  </div>
-
-                  <div className="story-panel">
-                    <small>авторская публикация</small>
-                    <h3>Сосед</h3>
-                    <p>Рассказ Дмитрия прочитали 89 человек. 12 оставили отзывы.</p>
-                    <button onClick={() => openModal("story")}>Читать фрагмент</button>
-                  </div>
-                </div>
-              )}
+            <div className="manifesto-values">
+              {coreValues.map((value, index) => (
+                <article
+                  key={value.title}
+                  className={`manifesto-value-card ${
+                    value.key === activeCoreValue.key ? "is-linked" : ""
+                  }`}
+                  data-reveal="up"
+                  style={{
+                    "--reveal-delay": `${index * 90}ms`,
+                    "--value-rgb": value.accentRgb,
+                  }}
+                >
+                  <span className="manifesto-value-index">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <h3>{value.title}</h3>
+                  <p>{value.text}</p>
+                </article>
+              ))}
             </div>
-          </section>
-        ))}
+          </div>
+        </section>
+
+        {journey.map((item, index) => {
+          const journeyValue = coreValueByKey[item.valueKey];
+
+          return (
+            <section
+              id={item.id}
+              key={item.id}
+              className={`journey-section section tone-${item.tone}`}
+            >
+              <div className="section-rail" data-reveal="fade">
+                <span className="section-rail-step">{item.step}</span>
+                <span className="section-rail-line" aria-hidden="true" />
+                <span className="section-rail-label">{item.chapterLabel}</span>
+              </div>
+
+              <div className="journey-copy" data-reveal="left">
+                <p className="eyebrow">{item.kicker}</p>
+
+                <div className="journey-meta-row">
+                  <span className="journey-chip journey-chip-accent">
+                    {journeyValue?.title ?? "Ценность"}
+                  </span>
+                  <span className="journey-chip">{item.chapterLabel}</span>
+                </div>
+
+                <h2>{item.title}</h2>
+                <p className="section-subtitle">{item.subtitle}</p>
+                <p className="section-text">{item.text}</p>
+
+                <div className="stat-card">
+                  <strong>{item.stat}</strong>
+                  <span>{item.statText}</span>
+                </div>
+
+                <div className="journey-footnote">
+                  <span>Редакционная заметка</span>
+                  <p>{item.footnote}</p>
+                </div>
+              </div>
+
+              <div className="visual-stage" data-reveal="right">
+                {index === 0 && (
+                  <div className="forgotten-visual">
+                    <div className="dust-light" />
+
+                    <div className="book-stack">
+                      <span />
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+
+                    <div className="hover-note">{item.visualTitle}</div>
+                  </div>
+                )}
+
+                {index === 1 && (
+                  <div className="kiosk-visual">
+                    <DeferredMoscowMap label="Подключаем активную точку на Павелецкой" />
+
+                    <div className="kiosk-card">
+                      <span className="scan-line" />
+                      <strong>Книгомат</strong>
+                      <p>Книга добавлена в приложение</p>
+                      <small>00:05 после загрузки</small>
+                    </div>
+                  </div>
+                )}
+
+                {index === 2 && (
+                  <div className="app-visual">
+                    <div className="phone-card">
+                      <div className="phone-header" />
+
+                      <div className="book-row">
+                        <div className="tiny-cover" />
+                        <div>
+                          <strong>Найденная книга</strong>
+                          <span>Павелецкая → Курский вокзал</span>
+                        </div>
+                      </div>
+
+                      <div className="review-bubble">
+                        «Давно искала это издание. Оставляю книгу дальше — пусть
+                        едет».
+                      </div>
+
+                      <div className="profile-chip">
+                        <span>А</span>
+                        <div>
+                          <strong>Аня</strong>
+                          <small>17 отзывов · 4 подборки</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {index === 3 && (
+                  <div className="collection-visual">
+                    <div className="collection-card">
+                      <p>подборка</p>
+                      <h3>{collections[collectionIndex]}</h3>
+
+                      <div className="collection-books">
+                        <span />
+                        <span />
+                        <span />
+                      </div>
+                    </div>
+
+                    <div className="comment-stream">
+                      <span>Спасибо, я тоже её прочитал</span>
+                      <span>Добавил себе в список</span>
+                      <span>У нас похожий вкус</span>
+                    </div>
+
+                    <div className="carousel-controls">
+                      <button
+                        type="button"
+                        aria-label="Предыдущая подборка"
+                        onClick={() => shiftCollection(-1)}
+                      >
+                        ←
+                      </button>
+
+                      <button
+                        type="button"
+                        aria-label="Следующая подборка"
+                        onClick={() => shiftCollection(1)}
+                      >
+                        →
+                      </button>
+                    </div>
+
+                    <div className="collection-progress" aria-hidden="true">
+                      <span
+                        style={{
+                          width: `${((collectionIndex + 1) / collections.length) * 100}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {index === 4 && (
+                  <div className="author-visual">
+                    <div className="quote-panel">
+                      <p>«Третья страница — это я сама год назад. Спасибо»</p>
+                      <span>отзыв читательницы</span>
+                    </div>
+
+                    <div className="story-panel">
+                      <small>авторская публикация</small>
+                      <h3>Сосед</h3>
+                      <p>
+                        Рассказ Дмитрия прочитали 89 человек. 12 оставили отзывы.
+                      </p>
+                      <button onClick={() => openModal("story")}>
+                        Читать фрагмент
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+          );
+        })}
 
         <section id="live-map" className="section map-section">
-          <div className="map-copy">
+          <div className="map-copy" data-reveal="left">
             <p className="eyebrow">книга продолжает путь</p>
             <h2>Ты можешь стать следующим читателем</h2>
 
@@ -753,94 +697,13 @@ const openModal = (type) => {
             </div>
           </div>
 
-          <MoscowMap />
+          <div data-reveal="right">
+            <DeferredMoscowMap label="Подтягиваем ближайшие книгоматы по Москве" />
+          </div>
         </section>
-        <section id="catalog" className="section catalog-section">
-  <div className="service-head">
-    <p className="eyebrow">живой каталог</p>
-    <h2>Книги, которые можно забрать сейчас</h2>
-    <p>
-      Это прототип каталога: пользователь ищет книгу, смотрит ближайший книгомат
-      и бронирует экземпляр перед тем, как идти за ним.
-    </p>
-  </div>
-
-  <div className="catalog-toolbar">
-    <input
-      value={bookQuery}
-      onChange={(event) => setBookQuery(event.target.value)}
-      placeholder="Поиск: книга, автор или станция"
-    />
-
-    <div className="catalog-filters">
-      {["all", "Проза", "Фантастика", "Роман", "Эссе", "available"].map(
-        (filter) => (
-          <button
-            key={filter}
-            className={bookFilter === filter ? "active" : ""}
-            onClick={() => setBookFilter(filter)}
-          >
-            {filter === "all"
-              ? "Все"
-              : filter === "available"
-              ? "Доступные"
-              : filter}
-          </button>
-        )
-      )}
-    </div>
-  </div>
-
-  <div className="book-catalog-grid">
-    {filteredBooks.map((book) => (
-      <article key={book.id} className="catalog-book-card">
-        <div className={`generated-book-cover generated-${book.color}`}>
-  <div className="book-shine" />
-  <div className="book-spine-mini" />
-  <span className="book-genre">{book.genre}</span>
-  <strong>{book.title}</strong>
-  <small>{book.author}</small>
-  <div className="book-pattern">
-    <i />
-    <i />
-    <i />
-  </div>
-</div>
-
-        <div className="catalog-book-info">
-          <div>
-            <h3>{book.title}</h3>
-            <p>{book.author}</p>
-          </div>
-
-          <div className="book-meta">
-            <span>{book.station}</span>
-            <span>Состояние: {book.condition}</span>
-          </div>
-
-          <div className="book-status-row">
-            <span className={`book-status status-${book.status}`}>
-              {book.status === "available"
-                ? "доступна"
-                : book.status === "reserved"
-                ? "забронирована"
-                : "в пути"}
-            </span>
-
-            <button
-              disabled={book.status !== "available"}
-              onClick={() => reserveBook(book)}
-            >
-              {book.status === "available" ? "Забронировать" : "Недоступна"}
-            </button>
-          </div>
-        </div>
-      </article>
-    ))}
-  </div>
-</section>
+        <CatalogSection books={catalogBooks} onReserveBook={reserveBook} />
         <section id="guide" className="section service-section">
-  <div className="service-head">
+  <div className="service-head" data-reveal="up">
     <p className="eyebrow">сервис, а не просто история</p>
     <h2>Что можно сделать в «Полке»</h2>
     <p>
@@ -855,6 +718,7 @@ const openModal = (type) => {
       <button
         key={action.title}
         className="action-card"
+        data-reveal="up"
         onClick={() => scrollToId(action.target)}
       >
         <span>{action.title}</span>
@@ -866,7 +730,7 @@ const openModal = (type) => {
 </section>
 
 <section id="authors" className="section split-info-section">
-  <div className="info-panel">
+  <div className="info-panel" data-reveal="left">
     <p className="eyebrow">для авторов</p>
     <h2>Публикуй тексты и находи первых читателей</h2>
     <p>
@@ -887,7 +751,7 @@ const openModal = (type) => {
 </button>
   </div>
 
-  <div className="author-dashboard">
+  <div className="author-dashboard" data-reveal="right">
     <div className="dash-top">
       <strong>Авторский кабинет</strong>
       <span>online</span>
@@ -915,7 +779,7 @@ const openModal = (type) => {
 </section>
 
 <section id="partners" className="section partners-section">
-  <div className="service-head">
+  <div className="service-head" data-reveal="up">
     <p className="eyebrow">для города и партнёров</p>
     <h2>Книгомат может стоять в библиотеке, вузе, кафе или офисе</h2>
     <p>
@@ -925,22 +789,22 @@ const openModal = (type) => {
   </div>
 
   <div className="partner-grid">
-    <div>
+    <div data-reveal="up">
       <strong>Библиотекам</strong>
       <p>Новые посетители, обменные полки, локальные подборки и события.</p>
     </div>
 
-    <div>
+    <div data-reveal="up">
       <strong>Вузам</strong>
       <p>Книжные точки в корпусах, клубы чтения и авторские публикации студентов.</p>
     </div>
 
-    <div>
+    <div data-reveal="up">
       <strong>Кафе</strong>
       <p>Тёплая городская механика, которая делает место живым и запоминающимся.</p>
     </div>
 
-    <div>
+    <div data-reveal="up">
       <strong>Бизнесу</strong>
       <p>ESG-механика: книги не выбрасываются, а продолжают движение.</p>
     </div>
@@ -957,14 +821,14 @@ const openModal = (type) => {
 </section>
 
 <section className="section faq-section">
-  <div className="service-head">
+  <div className="service-head" data-reveal="up">
     <p className="eyebrow">вопросы</p>
     <h2>Перед тем как взять или оставить книгу</h2>
   </div>
 
   <div className="faq-list">
     {faq.map((item) => (
-      <details key={item.q} className="faq-item">
+      <details key={item.q} className="faq-item" data-reveal="up">
         <summary>{item.q}</summary>
         <p>{item.a}</p>
       </details>
@@ -973,7 +837,7 @@ const openModal = (type) => {
 </section>
 
 <section className="section resources-section">
-  <div className="resources-card">
+  <div className="resources-card" data-reveal="scale">
     <p className="eyebrow">полезные ссылки</p>
     <h2>Ресурсы, инструкции и контакты</h2>
 
@@ -989,7 +853,7 @@ const openModal = (type) => {
 </section>
 
         <section id="download" className="download-section section">
-          <div className="download-card">
+          <div className="download-card" data-reveal="scale">
             <p className="eyebrow">начни свою историю</p>
             <h2>Ты можешь быть Аней, Димой или кем-то ещё</h2>
 
@@ -1018,23 +882,7 @@ const openModal = (type) => {
             </div>
           </div>
         </section>
-        {modal && (
-  <div className="modal-overlay" onClick={() => setModal(null)}>
-    <div className="polka-modal" onClick={(event) => event.stopPropagation()}>
-      <button className="modal-close" onClick={() => setModal(null)}>
-        ×
-      </button>
-
-      <p className="eyebrow">действие</p>
-      <h3>{modal.title}</h3>
-      <p>{modal.text}</p>
-
-      <button className="primary-btn" onClick={() => setModal(null)}>
-        {modal.button}
-      </button>
-    </div>
-  </div>
-)}
+        <ModalDialog modal={modal} onClose={closeModal} />
       </main>
     </>
   );
