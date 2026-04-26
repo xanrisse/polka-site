@@ -2615,6 +2615,21 @@ h1 span {
   overflow: auto;
 }
 
+/* Debug panel for selected book (temporary) */
+.debug-selected-book {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 11000;
+  background: rgba(18, 15, 11, 0.92);
+  color: var(--paper);
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,247,232,0.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  font-weight: 700;
+}
+
 .book-detail-layout {
   display: grid;
   grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);

@@ -301,6 +301,19 @@ export default function CatalogSection({ books, onReserveBook }) {
         onClose={closeBookDetail}
         onReserveBook={reserveFromDetail}
       />
+
+      {selectedBook && (
+        <div className="debug-selected-book" role="status">
+          <div>
+            <strong>DEBUG:</strong> {selectedBook.title}
+          </div>
+          <div style={{ marginTop: 8 }}>
+            <button type="button" onClick={closeBookDetail} className="ghost-btn">
+              Закрыть (debug)
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
