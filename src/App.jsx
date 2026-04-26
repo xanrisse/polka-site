@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import MoscowMap from "./components/MoscowMap.jsx";
 import "./App.css";
 
 const journey = [
@@ -157,6 +158,58 @@ const resourceLinks = [
     href: "mailto:hello@polka.example",
   },
 ];
+const catalogBooks = [
+  {
+    id: 1,
+    title: "Маленький принц",
+    author: "Антуан де Сент-Экзюпери",
+    genre: "Проза",
+    station: "Курский вокзал",
+    status: "available",
+    condition: "хорошее",
+    color: "gold",
+  },
+  {
+    id: 2,
+    title: "451 градус по Фаренгейту",
+    author: "Рэй Брэдбери",
+    genre: "Фантастика",
+    station: "Павелецкая",
+    status: "available",
+    condition: "отличное",
+    color: "red",
+  },
+  {
+    id: 3,
+    title: "Норвежский лес",
+    author: "Харуки Мураками",
+    genre: "Роман",
+    station: "Арбатская",
+    status: "reserved",
+    condition: "хорошее",
+    color: "green",
+  },
+  {
+    id: 4,
+    title: "Письма к молодому поэту",
+    author: "Райнер Мария Рильке",
+    genre: "Эссе",
+    station: "Таганская",
+    status: "available",
+    condition: "новое",
+    color: "blue",
+  },
+  {
+    id: 5,
+    title: "Солярис",
+    author: "Станислав Лем",
+    genre: "Фантастика",
+    station: "ВДНХ",
+    status: "moving",
+    condition: "хорошее",
+    color: "violet",
+  },
+];
 
 function useActiveSection(ids) {
   const [active, setActive] = useState(ids[0]);
@@ -241,6 +294,88 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [cursor, setCursor] = useState({ x: 50, y: 50 });
+  const [modal, setModal] = useState(null);
+  const [bookQuery, setBookQuery] = useState("");
+const [bookFilter, setBookFilter] = useState("all");
+
+const filteredBooks = catalogBooks.filter((book) => {
+  const query = bookQuery.toLowerCase();
+
+  const matchesQuery =
+    book.title.toLowerCase().includes(query) ||
+    book.author.toLowerCase().includes(query) ||
+    book.station.toLowerCase().includes(query);
+
+  const matchesFilter =
+    bookFilter === "all" ||
+    book.genre === bookFilter ||
+    book.status === bookFilter;
+
+  return matchesQuery && matchesFilter;
+});
+
+const reserveBook = (book) => {
+  setModal({
+    title: `Бронь: ${book.title}`,
+    text: `Книга будет ждать тебя в книгомате «${book.station}». Код брони: POLKA-${book.id}42. В реальном приложении бронь действовала бы 30 минут.`,
+    button: "Понятно",
+  });
+};
+
+const openModal = (type) => {
+  const content = {
+    story: {
+      title: "Фрагмент рассказа «Сосед»",
+      text:
+        "Он жил за стеной так тихо, будто боялся помешать чужим жизням. Но однажды на лестничной клетке появилась книга с запиской: «Если дочитаешь — оставь следующему».",
+      button: "Закрыть",
+    },
+    findBook: {
+      title: "Найти эту книгу",
+      text:
+        "В реальном приложении здесь открылся бы экран книги и ближайший книгомат. В прототипе можно перейти к карте и выбрать точку.",
+      button: "Понятно",
+    },
+    leaveBook: {
+      title: "Оставить свою книгу",
+      text:
+        "Проверь состояние книги, выбери ближайший книгомат, отсканируй QR-код и положи книгу в свободную ячейку.",
+      button: "Хорошо",
+    },
+    appStore: {
+      title: "App Store",
+      text:
+        "Здесь будет ссылка на приложение «Полка» в App Store. Пока это интерактивный прототип.",
+      button: "Закрыть",
+    },
+    googlePlay: {
+      title: "Google Play",
+      text:
+        "Здесь будет ссылка на приложение «Полка» в Google Play. Пока это интерактивный прототип.",
+      button: "Закрыть",
+    },
+    authorSubmit: {
+      title: "Подать текст",
+      text:
+        "Автор загружает рассказ, проходит модерацию и получает первые отзывы от читателей «Полки».",
+      button: "Закрыть",
+    },
+    partner: {
+      title: "Стать площадкой",
+      text:
+        "Кафе, вуз, библиотека или офис могут разместить книгомат и стать частью городской книжной сети.",
+      button: "Закрыть",
+    },
+    presentation: {
+      title: "Презентация проекта",
+      text:
+        "В реальном сервисе здесь скачивался бы PDF для партнёров: механика, аудитория, условия подключения и примеры точек.",
+      button: "Закрыть",
+    },
+  };
+
+  setModal(content[type]);
+};
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1200);
@@ -353,6 +488,9 @@ export default function App() {
                 <button onClick={() => scrollToId("live-map")} className="ghost-btn">
                   К карте книгоматов
                 </button>
+                <button onClick={() => scrollToId("catalog")} className="ghost-btn">
+  Смотреть книги
+</button>
               </div>
 
               <div className="trust-row">
@@ -445,27 +583,17 @@ export default function App() {
               )}
 
               {index === 1 && (
-                <div className="kiosk-visual">
-                  <div className="city-map">
-                    {bookPoints.slice(0, 3).map((point) => (
-                      <button
-                        key={point.name}
-                        className="map-pin"
-                        style={{ left: `${point.x}%`, top: `${point.y}%` }}
-                      >
-                        <span>{point.name}</span>
-                      </button>
-                    ))}
-                  </div>
+  <div className="kiosk-visual">
+    <MoscowMap />
 
-                  <div className="kiosk-card">
-                    <span className="scan-line" />
-                    <strong>Книгомат</strong>
-                    <p>Книга добавлена в приложение</p>
-                    <small>00:05 после загрузки</small>
-                  </div>
-                </div>
-              )}
+    <div className="kiosk-card">
+      <span className="scan-line" />
+      <strong>Книгомат</strong>
+      <p>Книга добавлена в приложение</p>
+      <small>00:05 после загрузки</small>
+    </div>
+  </div>
+)}
 
               {index === 2 && (
                 <div className="app-visual">
@@ -550,7 +678,7 @@ export default function App() {
                     <small>авторская публикация</small>
                     <h3>Сосед</h3>
                     <p>Рассказ Дмитрия прочитали 89 человек. 12 оставили отзывы.</p>
-                    <button>Читать фрагмент</button>
+                    <button onClick={() => openModal("story")}>Читать фрагмент</button>
                   </div>
                 </div>
               )}
@@ -592,30 +720,89 @@ export default function App() {
             </div>
 
             <div className="hero-actions">
-              <button className="primary-btn">Найти эту книгу</button>
-              <button className="ghost-btn">Оставить свою книгу</button>
+              <button className="primary-btn" onClick={() => openModal("findBook")}>Найти эту книгу</button>
+              <button className="ghost-btn" onClick={() => openModal("leaveBook")}>Оставить свою книгу</button>
             </div>
           </div>
 
-          <div className="large-map">
-            <div className="map-river" />
-
-            {bookPoints.map((point) => (
-              <button
-                key={point.name}
-                className={`large-pin ${
-                  point.name === "Курский вокзал" ? "selected" : ""
-                }`}
-                style={{ left: `${point.x}%`, top: `${point.y}%` }}
-              >
-                <span>
-                  <strong>{point.name}</strong>
-                  <small>{point.status}</small>
-                </span>
-              </button>
-            ))}
-          </div>
+          <MoscowMap />
         </section>
+        <section id="catalog" className="section catalog-section">
+  <div className="service-head">
+    <p className="eyebrow">живой каталог</p>
+    <h2>Книги, которые можно забрать сейчас</h2>
+    <p>
+      Это прототип каталога: пользователь ищет книгу, смотрит ближайший книгомат
+      и бронирует экземпляр перед тем, как идти за ним.
+    </p>
+  </div>
+
+  <div className="catalog-toolbar">
+    <input
+      value={bookQuery}
+      onChange={(event) => setBookQuery(event.target.value)}
+      placeholder="Поиск: книга, автор или станция"
+    />
+
+    <div className="catalog-filters">
+      {["all", "Проза", "Фантастика", "Роман", "Эссе", "available"].map(
+        (filter) => (
+          <button
+            key={filter}
+            className={bookFilter === filter ? "active" : ""}
+            onClick={() => setBookFilter(filter)}
+          >
+            {filter === "all"
+              ? "Все"
+              : filter === "available"
+              ? "Доступные"
+              : filter}
+          </button>
+        )
+      )}
+    </div>
+  </div>
+
+  <div className="book-catalog-grid">
+    {filteredBooks.map((book) => (
+      <article key={book.id} className="catalog-book-card">
+        <div className={`catalog-cover cover-${book.color}`}>
+          <span>{book.genre}</span>
+          <strong>{book.title}</strong>
+        </div>
+
+        <div className="catalog-book-info">
+          <div>
+            <h3>{book.title}</h3>
+            <p>{book.author}</p>
+          </div>
+
+          <div className="book-meta">
+            <span>{book.station}</span>
+            <span>Состояние: {book.condition}</span>
+          </div>
+
+          <div className="book-status-row">
+            <span className={`book-status status-${book.status}`}>
+              {book.status === "available"
+                ? "доступна"
+                : book.status === "reserved"
+                ? "забронирована"
+                : "в пути"}
+            </span>
+
+            <button
+              disabled={book.status !== "available"}
+              onClick={() => reserveBook(book)}
+            >
+              {book.status === "available" ? "Забронировать" : "Недоступна"}
+            </button>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
         <section id="guide" className="section service-section">
   <div className="service-head">
     <p className="eyebrow">сервис, а не просто история</p>
@@ -659,7 +846,9 @@ export default function App() {
       <span>04 · попасть в подборку</span>
     </div>
 
-    <button className="primary-btn">Подать текст</button>
+    <button className="primary-btn" onClick={() => openModal("authorSubmit")}>
+  Подать текст
+</button>
   </div>
 
   <div className="author-dashboard">
@@ -722,8 +911,12 @@ export default function App() {
   </div>
 
   <div className="partner-cta">
-    <button className="primary-btn">Стать площадкой</button>
-    <button className="ghost-btn">Скачать презентацию</button>
+    <button className="primary-btn" onClick={() => openModal("partner")}>
+  Стать площадкой
+</button>
+    <button className="ghost-btn" onClick={() => openModal("presentation")}>
+  Скачать презентацию
+</button>
   </div>
 </section>
 
@@ -770,15 +963,9 @@ export default function App() {
             </p>
 
             <div className="download-grid">
-              <button className="store-btn">
-                <span>Скачать в</span>
-                App Store
-              </button>
+              <button className="store-btn" onClick={() => openModal("appStore")}> <span>Скачать в</span> App Store</button>
 
-              <button className="store-btn">
-                <span>Скачать в</span>
-                Google Play
-              </button>
+              <button className="store-btn" onClick={() => openModal("googlePlay")}><span>Скачать в</span>Google Play</button>
 
               <div className="qr-card">
                 <div className="qr-grid">
@@ -795,6 +982,23 @@ export default function App() {
             </div>
           </div>
         </section>
+        {modal && (
+  <div className="modal-overlay" onClick={() => setModal(null)}>
+    <div className="polka-modal" onClick={(event) => event.stopPropagation()}>
+      <button className="modal-close" onClick={() => setModal(null)}>
+        ×
+      </button>
+
+      <p className="eyebrow">действие</p>
+      <h3>{modal.title}</h3>
+      <p>{modal.text}</p>
+
+      <button className="primary-btn" onClick={() => setModal(null)}>
+        {modal.button}
+      </button>
+    </div>
+  </div>
+)}
       </main>
     </>
   );
