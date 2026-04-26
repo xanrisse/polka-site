@@ -89,6 +89,7 @@ export default function CatalogSection({ books, onReserveBook }) {
   };
 
   const openBookDetail = (book) => {
+    console.log('openBookDetail', book && book.title);
     startTransition(() => setSelectedBook(book));
   };
 

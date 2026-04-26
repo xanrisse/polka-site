@@ -59,6 +59,7 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
   }, [book]);
 
   if (!book) return null;
+  console.log('BookDetailDialog book:', book && book.title);
 
   const statusLabel = bookStatusLabels[book.status] ?? book.status;
   const isAvailable = book.status === "available";
