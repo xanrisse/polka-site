@@ -24,7 +24,14 @@ export default function CatalogSection({ books, onReserveBook }) {
     (book) => book.status === "available"
   ).length;
   const hasActiveCatalogFilters = Boolean(bookQuery.trim()) || bookFilter !== "all";
-  const quickSearches = ["Фантастика", "Павелецкая", "Курский вокзал", "Эссе"];
+  const quickSearches = [
+    "Фантастика",
+    "Поэзия",
+    "Нон-фикшн",
+    "Павелецкая",
+    "Парк культуры",
+    "Курский вокзал",
+  ];
 
   const filteredBooks = books.filter((book) => {
     const matchesQuery =

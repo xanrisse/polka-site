@@ -544,7 +544,10 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="visual-stage" data-reveal="right">
+              <div
+                className={`visual-stage visual-stage-${item.id}`}
+                data-reveal="right"
+              >
                 {index === 0 && (
                   <div className="forgotten-visual">
                     <div className="dust-light" />

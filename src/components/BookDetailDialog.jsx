@@ -90,8 +90,8 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
           ×
         </button>
 
-        <div className="book-detail-layout">
-          <aside className="book-detail-aside">
+        <div className="book-detail-book">
+          <aside className="book-detail-cover-panel" aria-label="Обложка книги">
             <div className={`book-detail-cover generated-${book.color}`}>
               <div className="book-shine" />
               <div className="book-spine-mini" />
@@ -105,52 +105,70 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
               </div>
             </div>
 
-            <div className="book-detail-facts">
-              <div>
-                <span>сейчас</span>
-                <strong>{book.station}</strong>
-              </div>
-
-              <div>
-                <span>издание</span>
-                <strong>{book.publisher}</strong>
-              </div>
-
-              <div>
-                <span>объём</span>
-                <strong>
-                  {book.year} · {book.pages}
-                </strong>
-              </div>
+            <div className="book-detail-stamp">
+              <span>экземпляр</span>
+              <strong>POLKA-{String(book.id).padStart(3, "0")}</strong>
             </div>
           </aside>
 
-          <section className="book-detail-main">
+          <section className="book-detail-page book-detail-page-primary">
             <p className="eyebrow">страница книги</p>
-            <h3 id={titleId}>{book.title}</h3>
-            <p className="book-detail-author">{book.author}</p>
 
-            <div className="book-detail-meta">
-              <span className={`book-status status-${book.status}`}>{statusLabel}</span>
-              <span>{book.condition}</span>
-              <span>{book.genre}</span>
+            <div className="book-detail-title-row">
+              <div>
+                <h3 id={titleId}>{book.title}</h3>
+                <p className="book-detail-author">{book.author}</p>
+              </div>
+
+              <span className={`book-status status-${book.status}`}>
+                {statusLabel}
+              </span>
             </div>
 
+            <dl className="book-detail-facts">
+              <div>
+                <dt>сейчас</dt>
+                <dd>{book.station}</dd>
+              </div>
+
+              <div>
+                <dt>издание</dt>
+                <dd>{book.publisher}</dd>
+              </div>
+
+              <div>
+                <dt>объём</dt>
+                <dd>
+                  {book.year} · {book.pages}
+                </dd>
+              </div>
+
+              <div>
+                <dt>состояние</dt>
+                <dd>{book.condition}</dd>
+              </div>
+            </dl>
+
             <div className="book-detail-copy" id={descriptionId}>
-              <section>
+              <article>
                 <span>Аннотация</span>
                 <p>{book.annotation}</p>
-              </section>
+              </article>
 
-              <section>
+              <article>
                 <span>Почему её берут</span>
                 <p>{book.shelfNote}</p>
-              </section>
+              </article>
+            </div>
+          </section>
 
-              <section>
-                <span>Читательский контекст</span>
-                <p>{book.readerNote}</p>
-              </section>
+          <section className="book-detail-page book-detail-page-secondary">
+            <div className="book-detail-page-mark">Полка</div>
+
+            <div className="book-detail-meta">
+              <span>{book.genre}</span>
+              <span>{book.condition}</span>
+              <span>{book.station}</span>
             </div>
 
             <div className="book-detail-route">
@@ -164,6 +182,11 @@ export default function BookDetailDialog({ book, onClose, onReserveBook }) {
                   </div>
                 ))}
               </div>
+            </div>
+
+            <div className="book-detail-reader-card">
+              <span>Читательский контекст</span>
+              <p>{book.readerNote}</p>
             </div>
 
             <div className="book-detail-actions">
