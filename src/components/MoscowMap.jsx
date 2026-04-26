@@ -172,7 +172,7 @@ export default function MoscowMap() {
 
         {bookMachines.map((point) => (
           <Marker key={point.name} position={point.position} icon={bookIcon}>
-            <Popup>
+            <Popup className="polka-map-popup">
               <div className="map-popup">
                 <small>точка сети 342 книгоматов</small>
                 <strong>{point.name}</strong>

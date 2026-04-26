@@ -2506,6 +2506,45 @@ h1 span {
   color: var(--paper);
 }
 
+.moscow-map .leaflet-popup.polka-map-popup .leaflet-popup-content-wrapper {
+  background: #17100b !important;
+  color: #fff7e8 !important;
+  border: 1px solid rgba(255, 247, 232, 0.2) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5) !important;
+}
+
+.moscow-map .leaflet-popup.polka-map-popup .leaflet-popup-tip {
+  background: #17100b !important;
+}
+
+.moscow-map .leaflet-popup.polka-map-popup .leaflet-popup-content {
+  min-width: 250px;
+  margin: 18px;
+}
+
+.moscow-map .leaflet-popup.polka-map-popup .map-popup small {
+  color: #f0b35b !important;
+}
+
+.moscow-map .leaflet-popup.polka-map-popup .map-popup strong,
+.moscow-map .leaflet-popup.polka-map-popup .map-popup p {
+  color: #fff7e8 !important;
+}
+
+.moscow-map .leaflet-popup.polka-map-popup .map-popup span {
+  color: rgba(255, 247, 232, 0.78) !important;
+}
+
+.moscow-map .leaflet-popup.polka-map-popup .map-popup button {
+  background: linear-gradient(135deg, #f0b35b, #ffd48e) !important;
+  color: #1c120a !important;
+}
+
+.moscow-map .leaflet-popup.polka-map-popup a.leaflet-popup-close-button {
+  color: rgba(255, 247, 232, 0.78) !important;
+}
+
 @keyframes markerPulse {
   0%,
   100% {
