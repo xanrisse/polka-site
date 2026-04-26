@@ -74,41 +74,6 @@ const bookMachines = [
     books: 22,
     position: [55.7812, 37.6339],
   },
-  {
-    name: "Книгомат · Бауманская",
-    address: "Бауманская улица, Москва",
-    status: "Студенческая полка",
-    books: 33,
-    position: [55.7724, 37.679],
-  },
-  {
-    name: "Книгомат · Новослободская",
-    address: "Новослободская улица, Москва",
-    status: "5 свежих отзывов",
-    books: 25,
-    position: [55.7798, 37.6012],
-  },
-  {
-    name: "Книгомат · Третьяковская",
-    address: "Климентовский переулок, Москва",
-    status: "Поэзия и эссе",
-    books: 19,
-    position: [55.7408, 37.6257],
-  },
-  {
-    name: "Книгомат · Университет",
-    address: "Ломоносовский проспект, Москва",
-    status: "Кампусная точка",
-    books: 21,
-    position: [55.6924, 37.5333],
-  },
-  {
-    name: "Книгомат · Авиапарк",
-    address: "Ходынский бульвар, Москва",
-    status: "Семейная подборка",
-    books: 17,
-    position: [55.7906, 37.531],
-  },
 ];
 
 const bookIcon = L.divIcon({
@@ -174,7 +139,7 @@ export default function MoscowMap() {
           <Marker key={point.name} position={point.position} icon={bookIcon}>
             <Popup className="polka-map-popup">
               <div className="map-popup">
-                <small>точка сети 342 книгоматов</small>
+                <small>точка сети 10 книгоматов</small>
                 <strong>{point.name}</strong>
                 <span>{point.address}</span>
                 <p>{point.status}</p>

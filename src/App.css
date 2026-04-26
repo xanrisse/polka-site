@@ -3297,7 +3297,7 @@ h1 span {
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
-  opacity: 0.72;
+  opacity: 0.78;
 }
 
 .snow-book-fall {
@@ -3313,14 +3313,17 @@ h1 span {
 
 .snow-book {
   position: absolute;
-  width: calc(34px * var(--scale));
-  height: calc(48px * var(--scale));
+  width: var(--book-width, 34px);
+  height: var(--book-height, 48px);
   transform-style: preserve-3d;
-  opacity: calc(0.25 + var(--depth));
-  filter: blur(calc((1 - var(--depth)) * 0.9px));
+  opacity: clamp(0.28, calc(0.2 + var(--depth)), 0.82);
+  filter:
+    blur(var(--book-blur, 0.3px))
+    saturate(1.08)
+    drop-shadow(0 18px 18px rgba(0, 0, 0, 0.2));
   animation:
-    snowBookDrift calc(var(--duration, 38s) * 0.72) ease-in-out infinite,
-    snowBookSpin calc(var(--duration, 38s) * 0.58) ease-in-out infinite;
+    snowBookDrift var(--drift-duration, 28s) ease-in-out infinite,
+    snowBookSpin var(--spin-duration, 24s) ease-in-out infinite;
   will-change: transform, margin-left;
 }
 
@@ -3328,23 +3331,33 @@ h1 span {
   position: absolute;
   inset: 0;
   z-index: 3;
-  border-radius: 5px 10px 10px 5px;
+  border-radius: 5px 11px 10px 5px;
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.34), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 28%),
     linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 13px,
+      rgba(255, 247, 232, 0.1) 13px 14px
+    ),
     linear-gradient(135deg, #d9a24e, #6f3c1f);
   box-shadow:
     0 18px 34px rgba(0, 0, 0, 0.22),
     inset 0 0 0 1px rgba(255, 247, 232, 0.22),
-    inset -4px 0 0 rgba(255, 247, 232, 0.13);
+    inset -4px 0 0 rgba(255, 247, 232, 0.13),
+    inset 0 -12px 20px rgba(0, 0, 0, 0.18);
 }
 
 .book-front::before {
   content: "";
   position: absolute;
-  inset: 7px;
+  inset: 6px;
   border: 1px solid rgba(255, 247, 232, 0.28);
-  border-radius: 4px 7px 7px 4px;
+  border-radius: 4px 8px 8px 4px;
+  box-shadow:
+    inset 3px 0 0 rgba(255, 247, 232, 0.08),
+    inset -2px 0 0 rgba(0, 0, 0, 0.12);
 }
 
 .book-front::after {
@@ -3361,15 +3374,32 @@ h1 span {
     0 16px 0 rgba(255, 247, 232, 0.16);
 }
 
+.book-cover-mark {
+  position: absolute;
+  z-index: 5;
+  right: 16%;
+  bottom: 16%;
+  width: 34%;
+  height: 18%;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 247, 232, 0.42), transparent),
+    rgba(255, 247, 232, 0.1);
+  box-shadow:
+    0 -12px 0 -1px rgba(255, 247, 232, 0.18),
+    -16px -18px 0 -2px rgba(0, 0, 0, 0.16);
+}
+
 .book-pages {
   position: absolute;
   z-index: 2;
-  right: calc(-6px * var(--scale));
-  top: calc(5px * var(--scale));
-  width: calc(8px * var(--scale));
-  height: calc(38px * var(--scale));
+  right: var(--negative-thickness, -6px);
+  top: 5px;
+  width: calc(var(--thickness, 6px) + 3px);
+  height: calc(var(--book-height, 48px) - 10px);
   border-radius: 0 8px 8px 0;
   background:
+    linear-gradient(90deg, rgba(18, 15, 11, 0.16), transparent 30%),
     repeating-linear-gradient(
       to bottom,
       rgba(255, 247, 232, 0.78) 0 2px,
@@ -3381,15 +3411,32 @@ h1 span {
 
 .book-spine-snow {
   position: absolute;
-  z-index: 4;
-  left: calc(7px * var(--scale));
+  z-index: 6;
+  left: 6px;
   top: 0;
-  width: calc(5px * var(--scale));
+  width: 5px;
   height: 100%;
-  background: rgba(18, 15, 11, 0.28);
+  border-radius: 5px 0 0 5px;
+  background:
+    linear-gradient(90deg, rgba(255, 247, 232, 0.16), transparent 35%),
+    rgba(18, 15, 11, 0.3);
   box-shadow:
     5px 0 0 rgba(255, 247, 232, 0.12),
     -2px 0 0 rgba(0, 0, 0, 0.18);
+}
+
+.book-ridge {
+  position: absolute;
+  z-index: 7;
+  left: 14px;
+  top: 4px;
+  width: 2px;
+  height: calc(var(--book-height, 48px) - 8px);
+  border-radius: 999px;
+  background: rgba(255, 247, 232, 0.18);
+  box-shadow:
+    4px 0 0 rgba(0, 0, 0, 0.08),
+    -8px 0 0 rgba(0, 0, 0, 0.16);
 }
 
 .snow-book b {
@@ -3408,80 +3455,124 @@ h1 span {
 .snow-book-0 .book-front {
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.34), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 28%),
     linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    repeating-linear-gradient(0deg, transparent 0 13px, rgba(255, 247, 232, 0.1) 13px 14px),
     linear-gradient(135deg, #d9a24e, #6f3c1f);
 }
 
 .snow-book-1 .book-front {
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 28%),
     linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(0deg, transparent 0 58%, rgba(255, 247, 232, 0.16) 58% 62%, transparent 62%),
     linear-gradient(135deg, #78d5a4, #1d4a34);
 }
 
 .snow-book-2 .book-front {
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.3), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 28%),
     linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    repeating-linear-gradient(90deg, transparent 0 11px, rgba(255, 247, 232, 0.1) 11px 12px),
     linear-gradient(135deg, #8bbcff, #202c58);
 }
 
 .snow-book-3 .book-front {
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 28%),
     linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(0deg, transparent 0 44%, rgba(255, 247, 232, 0.14) 44% 50%, transparent 50%),
     linear-gradient(135deg, #c4a3ff, #3c235f);
 }
 
 .snow-book-4 .book-front {
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 28%),
     linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    repeating-linear-gradient(0deg, transparent 0 16px, rgba(255, 247, 232, 0.1) 16px 17px),
     linear-gradient(135deg, #e56d5b, #4b1716);
 }
 
 .snow-book-5 .book-front {
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 28%),
     linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
     linear-gradient(135deg, #f4ead8, #9b7650);
 }
 
+.snow-book-6 .book-front {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.3), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 28%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    linear-gradient(0deg, transparent 0 36%, rgba(255, 247, 232, 0.14) 36% 41%, transparent 41%),
+    linear-gradient(135deg, #d6c8aa, #55432f);
+}
+
+.snow-book-7 .book-front {
+  background:
+    radial-gradient(circle at 72% 18%, rgba(255, 255, 255, 0.28), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 28%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0 18%, transparent 18%),
+    repeating-linear-gradient(0deg, transparent 0 10px, rgba(255, 247, 232, 0.1) 10px 11px),
+    linear-gradient(135deg, #3f6f5a, #1a241d);
+}
+
 @keyframes snowBookFall {
-  from {
-    transform: translate3d(0, -18vh, 0);
+  0% {
+    transform: translate3d(0, -22vh, 0) rotate(0deg);
   }
 
-  to {
-    transform: translate3d(0, 118vh, 0);
+  35% {
+    transform:
+      translate3d(var(--fall-mid-x, 20px), 36vh, 0)
+      rotate(var(--fall-rotate-soft, 8deg));
+  }
+
+  68% {
+    transform:
+      translate3d(var(--fall-late-x, -12px), 76vh, 0)
+      rotate(var(--fall-rotate-back, -5deg));
+  }
+
+  100% {
+    transform:
+      translate3d(var(--fall-end-x, 60px), 122vh, 0)
+      rotate(var(--fall-rotate, 18deg));
   }
 }
 
 @keyframes snowBookDrift {
   0% {
-    margin-left: calc(-36px * var(--drift));
+    margin-left: var(--drift-start, -36px);
   }
 
   20% {
-    margin-left: calc(22px * var(--drift));
+    margin-left: var(--drift-first, 22px);
   }
 
   45% {
-    margin-left: calc(54px * var(--drift));
+    margin-left: var(--drift-second, 54px);
   }
 
   70% {
-    margin-left: calc(-12px * var(--drift));
+    margin-left: var(--drift-third, -12px);
   }
 
   100% {
-    margin-left: calc(-36px * var(--drift));
+    margin-left: var(--drift-start, -36px);
   }
 }
 
 @keyframes snowBookSpin {
   0% {
     transform:
+      scale(var(--scale))
       rotateZ(var(--tilt))
       rotateY(0deg)
       rotateX(0deg);
@@ -3489,27 +3580,31 @@ h1 span {
 
   28% {
     transform:
-      rotateZ(calc(var(--tilt) + 16deg))
+      scale(var(--scale))
+      rotateZ(calc(var(--tilt) + var(--spin, 18deg)))
       rotateY(34deg)
       rotateX(8deg);
   }
 
   54% {
     transform:
-      rotateZ(calc(var(--tilt) - 12deg))
+      scale(var(--scale))
+      rotateZ(calc(var(--tilt) + var(--spin-back, -12deg)))
       rotateY(-26deg)
       rotateX(-6deg);
   }
 
   78% {
     transform:
-      rotateZ(calc(var(--tilt) + 8deg))
+      scale(var(--scale))
+      rotateZ(calc(var(--tilt) + var(--spin-soft, 8deg)))
       rotateY(18deg)
       rotateX(5deg);
   }
 
   100% {
     transform:
+      scale(var(--scale))
       rotateZ(var(--tilt))
       rotateY(0deg)
       rotateX(0deg);
@@ -3522,8 +3617,8 @@ h1 span {
   }
 
   .snow-book {
-    width: calc(28px * var(--scale));
-    height: calc(40px * var(--scale));
+    width: 28px;
+    height: 40px;
   }
 }
 

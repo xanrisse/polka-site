@@ -276,32 +276,67 @@ export default function App() {
 
       {!prefersReducedMotion && (
         <div className="book-snow" aria-hidden="true">
-          {Array.from({ length: 32 }).map((_, index) => (
-            <span
-              key={index}
-              className="snow-book-fall"
-              style={{
-                "--x": `${(index * 29 + 7) % 100}%`,
-                "--delay": `${(index % 16) * -2.6}s`,
-                "--duration": `${34 + (index % 10) * 3.8}s`,
-              }}
-            >
-              <i
-                className={`snow-book snow-book-${index % 6}`}
+          {Array.from({ length: 42 }).map((_, index) => {
+            const direction = index % 2 === 0 ? 1 : -1;
+            const bookWidth = 24 + (index % 7) * 4;
+            const bookHeight = 36 + ((index * 5) % 8) * 4;
+            const driftSize = 46 + (index % 8) * 15;
+            const signedDrift = direction * driftSize;
+            const scale = 0.68 + (index % 8) * 0.075;
+            const spin = 18 + (index % 7) * 9;
+            const duration = 32 + (index % 12) * 3.4;
+            const depth = 0.18 + (index % 6) * 0.1;
+            const thickness = 4 + (index % 4);
+            const fallRotate = direction * (12 + (index % 9) * 5);
+
+            return (
+              <span
+                key={index}
+                className="snow-book-fall"
                 style={{
-                  "--drift": `${index % 2 === 0 ? 1 : -1}`,
-                  "--scale": `${0.72 + (index % 6) * 0.09}`,
-                  "--depth": `${0.22 + (index % 5) * 0.11}`,
-                  "--tilt": `${-22 + (index % 9) * 6}deg`,
+                  "--x": `${(index * 23 + 11) % 100}%`,
+                  "--delay": `${(index % 21) * -1.85}s`,
+                  "--duration": `${duration}s`,
+                  "--drift-duration": `${duration * 0.72}s`,
+                  "--spin-duration": `${duration * 0.58}s`,
+                  "--fall-mid-x": `${signedDrift * 0.35}px`,
+                  "--fall-late-x": `${signedDrift * -0.22}px`,
+                  "--fall-end-x": `${signedDrift}px`,
+                  "--fall-rotate": `${fallRotate}deg`,
+                  "--fall-rotate-soft": `${fallRotate * 0.42}deg`,
+                  "--fall-rotate-back": `${fallRotate * -0.18}deg`,
                 }}
               >
-                <i className="book-front" />
-                <i className="book-pages" />
-                <i className="book-spine-snow" />
-                <b />
-              </i>
-            </span>
-          ))}
+                <i
+                  className={`snow-book snow-book-${index % 8}`}
+                  style={{
+                    "--drift-start": `${signedDrift * -0.6}px`,
+                    "--drift-first": `${signedDrift * 0.36}px`,
+                    "--drift-second": `${signedDrift * 0.82}px`,
+                    "--drift-third": `${signedDrift * -0.18}px`,
+                    "--book-width": `${bookWidth}px`,
+                    "--book-height": `${bookHeight}px`,
+                    "--thickness": `${thickness}px`,
+                    "--negative-thickness": `${-thickness}px`,
+                    "--scale": `${scale}`,
+                    "--depth": `${depth}`,
+                    "--book-blur": `${Math.max(0, (0.9 - depth) * 0.72)}px`,
+                    "--tilt": `${-30 + (index % 11) * 6}deg`,
+                    "--spin": `${spin}deg`,
+                    "--spin-back": `${-spin * 0.7}deg`,
+                    "--spin-soft": `${spin * 0.42}deg`,
+                  }}
+                >
+                  <i className="book-front" />
+                  <i className="book-cover-mark" />
+                  <i className="book-pages" />
+                  <i className="book-spine-snow" />
+                  <i className="book-ridge" />
+                  <b />
+                </i>
+              </span>
+            );
+          })}
         </div>
       )}
 
@@ -407,8 +442,8 @@ export default function App() {
 
               <div className="trust-row">
                 <div>
-                  <strong>342</strong>
-                  <span>книгомата</span>
+                  <strong>10</strong>
+                  <span>книгоматов</span>
                 </div>
 
                 <div>
@@ -750,9 +785,9 @@ export default function App() {
             <div className="big-metrics">
               <div>
                 <strong>
-                  <Counter value="342" />
+                  <Counter value="10" />
                 </strong>
-                <span>книгомата</span>
+                <span>книгоматов</span>
               </div>
 
               <div>
