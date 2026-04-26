@@ -93,6 +93,70 @@ const collections = [
   "Истории для дождливого вечера",
   "Маленькие книги с большим послевкусием",
 ];
+const serviceActions = [
+  {
+    title: "Найти книгу рядом",
+    text: "Открой карту книгоматов, выбери точку и посмотри, какие книги доступны сейчас.",
+    button: "Открыть карту",
+    target: "live-map",
+  },
+  {
+    title: "Оставить свою книгу",
+    text: "Подготовь книгу, выбери ближайший книгомат и передай её следующему читателю.",
+    button: "Инструкция",
+    target: "guide",
+  },
+  {
+    title: "Стать автором",
+    text: "Опубликуй рассказ, эссе или подборку — читатели смогут найти твой текст в приложении.",
+    button: "Для авторов",
+    target: "authors",
+  },
+  {
+    title: "Подключить площадку",
+    text: "Кафе, вуз, библиотека или коворкинг могут стать новой точкой книжного обмена.",
+    button: "Партнёрам",
+    target: "partners",
+  },
+];
+
+const faq = [
+  {
+    q: "Книгу можно забрать бесплатно?",
+    a: "Да. Логика сервиса — обмен и движение книг. Пользователь может взять книгу, прочитать и вернуть её в любой книгомат.",
+  },
+  {
+    q: "Что делать с плохим состоянием книги?",
+    a: "Перед передачей книга проходит базовую проверку: целые страницы, нет плесени, сильных загрязнений и повреждений.",
+  },
+  {
+    q: "Можно ли отслеживать путь книги?",
+    a: "Да. У книги появляется история перемещений: где её оставили, кто взял, где появился отзыв или подборка.",
+  },
+  {
+    q: "Можно ли публиковать свои тексты?",
+    a: "Да. В «Полке» есть авторский раздел: можно опубликовать рассказ, получить отзывы и попасть в печатную мини-подборку.",
+  },
+];
+
+const resourceLinks = [
+  {
+    label: "Инструкция: как оставить книгу",
+    href: "https://www.google.com/search?q=как+подготовить+книгу+к+буккроссингу",
+  },
+  {
+    label: "Что такое буккроссинг",
+    href: "https://ru.wikipedia.org/wiki/Буккроссинг",
+  },
+  {
+    label: "Карта библиотек Москвы",
+    href: "https://www.mos.ru/map/",
+  },
+  {
+    label: "Написать команде",
+    href: "mailto:hello@polka.example",
+  },
+];
 
 function useActiveSection(ids) {
   const [active, setActive] = useState(ids[0]);
@@ -552,6 +616,148 @@ export default function App() {
             ))}
           </div>
         </section>
+        <section id="guide" className="section service-section">
+  <div className="service-head">
+    <p className="eyebrow">сервис, а не просто история</p>
+    <h2>Что можно сделать в «Полке»</h2>
+    <p>
+      Лендинг ведёт не только по истории одной книги. Он показывает реальные
+      сценарии: найти книгу, оставить свою, опубликоваться или подключить новую
+      городскую точку.
+    </p>
+  </div>
+
+  <div className="action-grid">
+    {serviceActions.map((action) => (
+      <button
+        key={action.title}
+        className="action-card"
+        onClick={() => scrollToId(action.target)}
+      >
+        <span>{action.title}</span>
+        <p>{action.text}</p>
+        <strong>{action.button} →</strong>
+      </button>
+    ))}
+  </div>
+</section>
+
+<section id="authors" className="section split-info-section">
+  <div className="info-panel">
+    <p className="eyebrow">для авторов</p>
+    <h2>Публикуй тексты и находи первых читателей</h2>
+    <p>
+      Авторский раздел нужен тем, кто пишет «в стол». Текст можно выложить в
+      приложении, собрать первые отзывы, попасть в подборки и даже в печатный
+      мини-тираж для книгоматов.
+    </p>
+
+    <div className="step-list">
+      <span>01 · загрузить текст</span>
+      <span>02 · пройти модерацию</span>
+      <span>03 · получить отзывы</span>
+      <span>04 · попасть в подборку</span>
+    </div>
+
+    <button className="primary-btn">Подать текст</button>
+  </div>
+
+  <div className="author-dashboard">
+    <div className="dash-top">
+      <strong>Авторский кабинет</strong>
+      <span>online</span>
+    </div>
+
+    <div className="dash-row">
+      <span>Рассказ «Сосед»</span>
+      <strong>89 прочтений</strong>
+    </div>
+
+    <div className="dash-row">
+      <span>Отзывы</span>
+      <strong>12</strong>
+    </div>
+
+    <div className="dash-row">
+      <span>Заявка в мини-тираж</span>
+      <strong>на проверке</strong>
+    </div>
+
+    <div className="dash-note">
+      «Третья страница — это я сама год назад. Спасибо»
+    </div>
+  </div>
+</section>
+
+<section id="partners" className="section partners-section">
+  <div className="service-head">
+    <p className="eyebrow">для города и партнёров</p>
+    <h2>Книгомат может стоять в библиотеке, вузе, кафе или офисе</h2>
+    <p>
+      «Полка» может работать как городская инфраструктура: точки обмена,
+      статистика движения книг, читательские события и локальные подборки.
+    </p>
+  </div>
+
+  <div className="partner-grid">
+    <div>
+      <strong>Библиотекам</strong>
+      <p>Новые посетители, обменные полки, локальные подборки и события.</p>
+    </div>
+
+    <div>
+      <strong>Вузам</strong>
+      <p>Книжные точки в корпусах, клубы чтения и авторские публикации студентов.</p>
+    </div>
+
+    <div>
+      <strong>Кафе</strong>
+      <p>Тёплая городская механика, которая делает место живым и запоминающимся.</p>
+    </div>
+
+    <div>
+      <strong>Бизнесу</strong>
+      <p>ESG-механика: книги не выбрасываются, а продолжают движение.</p>
+    </div>
+  </div>
+
+  <div className="partner-cta">
+    <button className="primary-btn">Стать площадкой</button>
+    <button className="ghost-btn">Скачать презентацию</button>
+  </div>
+</section>
+
+<section className="section faq-section">
+  <div className="service-head">
+    <p className="eyebrow">вопросы</p>
+    <h2>Перед тем как взять или оставить книгу</h2>
+  </div>
+
+  <div className="faq-list">
+    {faq.map((item) => (
+      <details key={item.q} className="faq-item">
+        <summary>{item.q}</summary>
+        <p>{item.a}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<section className="section resources-section">
+  <div className="resources-card">
+    <p className="eyebrow">полезные ссылки</p>
+    <h2>Ресурсы, инструкции и контакты</h2>
+
+    <div className="resource-links">
+      {resourceLinks.map((link) => (
+        <a key={link.label} href={link.href} target="_blank" rel="noreferrer">
+          {link.label}
+          <span>↗</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
 
         <section id="download" className="download-section section">
           <div className="download-card">
