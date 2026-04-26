@@ -39,6 +39,76 @@ const bookMachines = [
     books: 64,
     position: [55.821, 37.6411],
   },
+  {
+    name: "Книгомат · Белорусская",
+    address: "площадь Тверская Застава, Москва",
+    status: "Подборки у метро",
+    books: 31,
+    position: [55.7767, 37.5813],
+  },
+  {
+    name: "Книгомат · Парк культуры",
+    address: "Зубовский бульвар, Москва",
+    status: "9 книг забронировали сегодня",
+    books: 24,
+    position: [55.7356, 37.5946],
+  },
+  {
+    name: "Книгомат · Сокол",
+    address: "Ленинградский проспект, Москва",
+    status: "Новая полка нон-фикшна",
+    books: 18,
+    position: [55.8051, 37.5153],
+  },
+  {
+    name: "Книгомат · Китай-город",
+    address: "Славянская площадь, Москва",
+    status: "Авторская подборка недели",
+    books: 29,
+    position: [55.7543, 37.6331],
+  },
+  {
+    name: "Книгомат · Проспект Мира",
+    address: "проспект Мира, 36, Москва",
+    status: "Книга в пути",
+    books: 22,
+    position: [55.7812, 37.6339],
+  },
+  {
+    name: "Книгомат · Бауманская",
+    address: "Бауманская улица, Москва",
+    status: "Студенческая полка",
+    books: 33,
+    position: [55.7724, 37.679],
+  },
+  {
+    name: "Книгомат · Новослободская",
+    address: "Новослободская улица, Москва",
+    status: "5 свежих отзывов",
+    books: 25,
+    position: [55.7798, 37.6012],
+  },
+  {
+    name: "Книгомат · Третьяковская",
+    address: "Климентовский переулок, Москва",
+    status: "Поэзия и эссе",
+    books: 19,
+    position: [55.7408, 37.6257],
+  },
+  {
+    name: "Книгомат · Университет",
+    address: "Ломоносовский проспект, Москва",
+    status: "Кампусная точка",
+    books: 21,
+    position: [55.6924, 37.5333],
+  },
+  {
+    name: "Книгомат · Авиапарк",
+    address: "Ходынский бульвар, Москва",
+    status: "Семейная подборка",
+    books: 17,
+    position: [55.7906, 37.531],
+  },
 ];
 
 const bookIcon = L.divIcon({
@@ -85,7 +155,7 @@ export default function MoscowMap() {
 
       <MapContainer
         center={[55.7558, 37.6173]}
-        zoom={11}
+        zoom={10}
         minZoom={9}
         maxZoom={18}
         scrollWheelZoom={false}
@@ -104,19 +174,22 @@ export default function MoscowMap() {
           <Marker key={point.name} position={point.position} icon={bookIcon}>
             <Popup>
               <div className="map-popup">
+                <small>точка сети 342 книгоматов</small>
                 <strong>{point.name}</strong>
                 <span>{point.address}</span>
                 <p>{point.status}</p>
                 <button
-  onClick={() =>
-    window.open(
-      `https://yandex.ru/maps/?text=${encodeURIComponent(point.address)}`,
-      "_blank"
-    )
-  }
->
-  {point.books} книг доступно
-</button>
+                  onClick={() =>
+                    window.open(
+                      `https://yandex.ru/maps/?text=${encodeURIComponent(
+                        point.address
+                      )}`,
+                      "_blank"
+                    )
+                  }
+                >
+                  {point.books} книг доступно
+                </button>
               </div>
             </Popup>
           </Marker>
