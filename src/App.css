@@ -2529,7 +2529,7 @@ h1 span {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 900;
+  z-index: 10050;
   display: grid;
   place-items: center;
   padding: 20px;
@@ -2602,6 +2602,7 @@ h1 span {
 
 .book-detail-dialog {
   position: relative;
+  z-index: 10051;
   width: min(1180px, 100%);
   max-height: calc(100vh - 24px);
   padding: clamp(18px, 2.2vw, 30px);
