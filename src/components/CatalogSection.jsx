@@ -314,6 +314,43 @@ export default function CatalogSection({ books, onReserveBook }) {
           </div>
         </div>
       )}
+
+      {/* Bright fallback modal to ensure visibility during debugging */}
+      {selectedBook && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 12000,
+            display: "grid",
+            placeItems: "center",
+            background: "rgba(255,255,255,0.95)",
+            color: "#111",
+            padding: 20,
+          }}
+          onClick={closeBookDetail}
+        >
+          <div
+            style={{
+              maxWidth: 720,
+              width: "100%",
+              background: "#fff",
+              borderRadius: 12,
+              padding: 24,
+              boxShadow: "0 10px 40px rgba(0,0,0,0.2)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 style={{ marginTop: 0 }}>{selectedBook.title}</h3>
+            <p style={{ marginBottom: 12 }}>{selectedBook.annotation}</p>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <button type="button" className="ghost-btn" onClick={closeBookDetail}>
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
