@@ -379,36 +379,6 @@ export default function App() {
           </button>
         </nav>
 
-        <aside className="side-stage-nav" aria-label="Быстрая навигация по этапам">
-          <button
-            type="button"
-            className="side-to-top"
-            onClick={() => scrollToId("hero")}
-            aria-label="Вернуться наверх страницы"
-          >
-            <span>↑</span>
-            <small>вверх</small>
-          </button>
-
-          <div className="side-stage-list">
-            {journey.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => scrollToId(item.id)}
-                className={`side-stage-button ${
-                  activeSection === item.id ? "active" : ""
-                }`}
-                aria-current={activeSection === item.id ? "step" : undefined}
-                aria-label={`Перейти к этапу ${item.step}: ${item.label}`}
-              >
-                <span>{item.step}</span>
-                <small>{item.label}</small>
-              </button>
-            ))}
-          </div>
-        </aside>
-
         <section id="hero" className="hero section">
           <div className="hero-bg-orbit orbit-one" />
           <div className="hero-bg-orbit orbit-two" />
