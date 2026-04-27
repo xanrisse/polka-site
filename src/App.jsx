@@ -884,96 +884,153 @@ export default function App() {
           </div>
         </section>
 
-<section id="authors" className="section split-info-section">
-  <div className="info-panel" data-reveal="left">
-    <p className="eyebrow">для авторов</p>
-    <h2>Публикуй тексты и находи первых читателей</h2>
-    <p>
-      Авторский раздел нужен тем, кто пишет «в стол». Текст можно выложить в
-      приложении, собрать первые отзывы, попасть в подборки и даже в печатный
-      мини-тираж для книгоматов.
-    </p>
+        <section id="authors" className="section split-info-section author-section">
+          <div className="info-panel author-copy-panel" data-reveal="left">
+            <p className="eyebrow">для авторов</p>
+            <h2>Публикуй тексты и находи первых читателей</h2>
+            <p>
+              Авторский раздел нужен тем, кто пишет «в стол». Текст можно
+              выложить в приложении, собрать первые отзывы, попасть в подборки
+              и даже в печатный мини-тираж для книгоматов.
+            </p>
 
-    <div className="step-list">
-      <span>01 · загрузить текст</span>
-      <span>02 · пройти модерацию</span>
-      <span>03 · получить отзывы</span>
-      <span>04 · попасть в подборку</span>
-    </div>
+            <div className="author-proof-row" aria-label="Возможности автора">
+              <span>
+                <strong>89</strong>
+                прочтений
+              </span>
+              <span>
+                <strong>12</strong>
+                отзывов
+              </span>
+              <span>
+                <strong>1</strong>
+                заявка в тираж
+              </span>
+            </div>
 
-    <button className="primary-btn" onClick={() => openModal("authorSubmit")}>
-  Подать текст
-</button>
-  </div>
+            <div className="step-list author-step-list">
+              <span>01 · загрузить текст</span>
+              <span>02 · пройти модерацию</span>
+              <span>03 · получить отзывы</span>
+              <span>04 · попасть в подборку</span>
+            </div>
 
-  <div className="author-dashboard" data-reveal="right">
-    <div className="dash-top">
-      <strong>Авторский кабинет</strong>
-      <span>online</span>
-    </div>
+            <button className="primary-btn" onClick={() => openModal("authorSubmit")}>
+              Подать текст
+            </button>
+          </div>
 
-    <div className="dash-row">
-      <span>Рассказ «Сосед»</span>
-      <strong>89 прочтений</strong>
-    </div>
+          <div className="author-dashboard author-studio" data-reveal="right">
+            <div className="dash-top">
+              <strong>Авторский кабинет</strong>
+              <span>online</span>
+            </div>
 
-    <div className="dash-row">
-      <span>Отзывы</span>
-      <strong>12</strong>
-    </div>
+            <div className="author-manuscript-card">
+              <small>черновик опубликован</small>
+              <h3>Сосед</h3>
+              <p>
+                Он жил за стеной так тихо, будто боялся помешать чужим жизням.
+                Но однажды на лестничной клетке появилась книга с запиской.
+              </p>
+            </div>
 
-    <div className="dash-row">
-      <span>Заявка в мини-тираж</span>
-      <strong>на проверке</strong>
-    </div>
+            <div className="author-signal-grid">
+              <div>
+                <span>охват</span>
+                <strong>89</strong>
+              </div>
+              <div>
+                <span>отзывы</span>
+                <strong>12</strong>
+              </div>
+              <div>
+                <span>статус</span>
+                <strong>на проверке</strong>
+              </div>
+            </div>
 
-    <div className="dash-note">
-      «Третья страница — это я сама год назад. Спасибо»
-    </div>
-  </div>
-</section>
+            <div className="dash-note">
+              «Третья страница — это я сама год назад. Спасибо»
+            </div>
+          </div>
+        </section>
 
-<section id="partners" className="section partners-section">
-  <div className="service-head" data-reveal="up">
-    <p className="eyebrow">для города и партнёров</p>
-    <h2>Книгомат может стоять в библиотеке, вузе, кафе или офисе</h2>
-    <p>
-      «Полка» может работать как городская инфраструктура: точки обмена,
-      статистика движения книг, читательские события и локальные подборки.
-    </p>
-  </div>
+        <section id="partners" className="section partners-section partner-city-section">
+          <div className="partner-layout">
+            <div className="service-head partner-copy" data-reveal="left">
+              <p className="eyebrow">для города и партнёров</p>
+              <h2>Книгомат может стоять в библиотеке, вузе, кафе или офисе</h2>
+              <p>
+                «Полка» может работать как городская инфраструктура: точки
+                обмена, статистика движения книг, читательские события и
+                локальные подборки.
+              </p>
 
-  <div className="partner-grid">
-    <div data-reveal="up">
-      <strong>Библиотекам</strong>
-      <p>Новые посетители, обменные полки, локальные подборки и события.</p>
-    </div>
+              <div className="partner-cta">
+                <button className="primary-btn" onClick={() => openModal("partner")}>
+                  Стать площадкой
+                </button>
+                <button
+                  className="ghost-btn"
+                  onClick={() => openModal("presentation")}
+                >
+                  Скачать презентацию
+                </button>
+              </div>
+            </div>
 
-    <div data-reveal="up">
-      <strong>Вузам</strong>
-      <p>Книжные точки в корпусах, клубы чтения и авторские публикации студентов.</p>
-    </div>
+            <div className="partner-network-card" data-reveal="right">
+              <div className="partner-network-map" aria-hidden="true">
+                <span className="partner-node node-library">Б</span>
+                <span className="partner-node node-campus">В</span>
+                <span className="partner-node node-cafe">К</span>
+                <span className="partner-node node-office">О</span>
+                <i className="network-line network-line-one" />
+                <i className="network-line network-line-two" />
+                <i className="network-line network-line-three" />
+              </div>
 
-    <div data-reveal="up">
-      <strong>Кафе</strong>
-      <p>Тёплая городская механика, которая делает место живым и запоминающимся.</p>
-    </div>
+              <div className="partner-network-caption">
+                <small>городская сеть</small>
+                <strong>10 точек могут связывать книги, места и людей</strong>
+              </div>
+            </div>
+          </div>
 
-    <div data-reveal="up">
-      <strong>Бизнесу</strong>
-      <p>ESG-механика: книги не выбрасываются, а продолжают движение.</p>
-    </div>
-  </div>
+          <div className="partner-grid partner-card-grid">
+            <div className="partner-card" data-reveal="up">
+              <span>точка культуры</span>
+              <strong>Библиотекам</strong>
+              <p>Новые посетители, обменные полки, локальные подборки и события.</p>
+            </div>
 
-  <div className="partner-cta">
-    <button className="primary-btn" onClick={() => openModal("partner")}>
-  Стать площадкой
-</button>
-    <button className="ghost-btn" onClick={() => openModal("presentation")}>
-  Скачать презентацию
-</button>
-  </div>
-</section>
+            <div className="partner-card" data-reveal="up">
+              <span>кампус</span>
+              <strong>Вузам</strong>
+              <p>
+                Книжные точки в корпусах, клубы чтения и авторские публикации
+                студентов.
+              </p>
+            </div>
+
+            <div className="partner-card" data-reveal="up">
+              <span>третье место</span>
+              <strong>Кафе</strong>
+              <p>
+                Тёплая городская механика, которая делает место живым и
+                запоминающимся.
+              </p>
+            </div>
+
+            <div className="partner-card" data-reveal="up">
+              <span>устойчивость</span>
+              <strong>Бизнесу</strong>
+              <p>ESG-механика: книги не выбрасываются, а продолжают движение.</p>
+            </div>
+          </div>
+        </section>
 
 <section className="section faq-section">
   <div className="service-head" data-reveal="up">
