@@ -2465,7 +2465,7 @@ h1 span {
 
 .partner-network-card {
   position: relative;
-  min-height: 420px;
+  min-height: 440px;
   border: 1px solid rgba(255, 247, 232, 0.14);
   border-radius: 46px;
   background:
@@ -2480,6 +2480,10 @@ h1 span {
 .partner-network-map {
   position: absolute;
   inset: 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(118px, 0.78fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) minmax(118px, 0.82fr) minmax(0, 1fr);
+  gap: 18px;
   border-radius: 34px;
   background:
     linear-gradient(90deg, rgba(255, 247, 232, 0.055) 1px, transparent 1px),
@@ -2487,72 +2491,120 @@ h1 span {
   background-size: 42px 42px;
 }
 
-.partner-node {
+.partner-network-map::before,
+.partner-network-map::after {
+  content: "";
   position: absolute;
+  z-index: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgb(var(--page-accent-rgb) / 0.6), transparent);
+  pointer-events: none;
+}
+
+.partner-network-map::before {
+  left: 16%;
+  right: 16%;
+  top: 50%;
+  height: 2px;
+}
+
+.partner-network-map::after {
+  top: 14%;
+  bottom: 24%;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(180deg, transparent, rgb(var(--page-support-rgb) / 0.58), transparent);
+}
+
+.partner-hub,
+.partner-node {
+  position: relative;
   z-index: 2;
   display: grid;
-  place-items: center;
-  width: 58px;
-  height: 58px;
-  border: 2px solid rgba(255, 247, 232, 0.68);
-  border-radius: 20px;
-  background: linear-gradient(135deg, var(--page-accent), var(--page-support));
-  color: #1c120a;
+  align-content: center;
+  min-width: 0;
+  border: 1px solid rgba(255, 247, 232, 0.14);
+  color: var(--paper);
+  text-align: center;
   font-weight: 950;
+}
+
+.partner-hub {
+  grid-column: 2;
+  grid-row: 2;
+  min-height: 118px;
+  padding: 20px 16px;
+  border-radius: 32px;
+  background:
+    linear-gradient(135deg, var(--page-accent), var(--page-support)),
+    rgba(255, 247, 232, 0.08);
+  color: #1c120a;
   box-shadow:
-    0 0 0 12px rgb(var(--page-accent-rgb) / 0.12),
-    0 20px 46px rgba(0, 0, 0, 0.28);
+    0 0 0 14px rgb(var(--page-accent-rgb) / 0.12),
+    0 24px 54px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 247, 232, 0.42);
+}
+
+.partner-hub small,
+.partner-node small {
+  color: inherit;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  opacity: 0.62;
+}
+
+.partner-hub strong {
+  margin-top: 8px;
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.partner-node {
+  min-height: 92px;
+  padding: 16px;
+  border-radius: 26px;
+  background:
+    linear-gradient(145deg, rgba(18, 13, 9, 0.82), rgba(18, 13, 9, 0.54)),
+    rgba(255, 247, 232, 0.06);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 247, 232, 0.08);
+}
+
+.partner-node strong {
+  margin-top: 8px;
+  color: var(--paper);
+  font-size: clamp(15px, 1.35vw, 19px);
+  line-height: 1.1;
 }
 
 .node-library {
-  left: 10%;
-  top: 18%;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
 }
 
 .node-campus {
-  right: 18%;
-  top: 16%;
+  grid-column: 3;
+  grid-row: 1;
+  align-self: end;
 }
 
 .node-cafe {
-  left: 26%;
-  bottom: 18%;
+  grid-column: 1;
+  grid-row: 3;
+  align-self: start;
 }
 
 .node-office {
-  right: 12%;
-  bottom: 22%;
-}
-
-.network-line {
-  position: absolute;
-  z-index: 1;
-  height: 2px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--page-accent), var(--page-support));
-  opacity: 0.6;
-  transform-origin: left center;
-}
-
-.network-line-one {
-  left: 20%;
-  top: 32%;
-  width: 52%;
-  transform: rotate(-3deg);
-}
-
-.network-line-two {
-  left: 30%;
-  top: 45%;
-  width: 42%;
-  transform: rotate(32deg);
-}
-
-.network-line-three {
-  left: 36%;
-  bottom: 30%;
-  width: 44%;
-  transform: rotate(-14deg);
+  grid-column: 3;
+  grid-row: 3;
+  align-self: start;
 }
 
 .partner-network-caption {
@@ -6721,26 +6773,42 @@ h1 span {
   }
 
   .partner-network-card {
-    min-height: 360px;
+    min-height: auto;
+    padding: 18px;
     border-radius: 30px;
   }
 
   .partner-network-map {
-    inset: 18px;
+    position: relative;
+    inset: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    gap: 10px;
     border-radius: 24px;
     background-size: 32px 32px;
   }
 
+  .partner-network-map::before,
+  .partner-network-map::after {
+    display: none;
+  }
+
+  .partner-hub,
   .partner-node {
-    width: 48px;
-    height: 48px;
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 76px;
+    padding: 14px;
     border-radius: 16px;
+    align-self: stretch;
   }
 
   .partner-network-caption {
-    left: 18px;
-    right: 18px;
-    bottom: 18px;
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    margin-top: 12px;
     padding: 18px;
     border-radius: 22px;
   }

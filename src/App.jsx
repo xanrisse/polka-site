@@ -841,23 +841,23 @@ export default function App() {
 
               <div className="service-system-card" aria-label="Схема работы сервиса">
                 <div className="service-system-top">
-                  <span>Polka service layer</span>
-                  <strong>одна книга проходит весь маршрут</strong>
+                  <span>сервисная схема</span>
+                  <strong>Одна книга проходит весь маршрут</strong>
                 </div>
 
                 <div className="service-flow-map">
-                  <span>книга</span>
+                  <span>Книга</span>
                   <i />
-                  <span>книгомат</span>
+                  <span>Книгомат</span>
                   <i />
-                  <span>читатель</span>
+                  <span>Читатель</span>
                   <i />
-                  <span>сообщество</span>
+                  <span>Сообщество</span>
                 </div>
 
                 <div className="service-live-card">
                   <small>сейчас в системе</small>
-                  <strong>поиск, обмен, отзывы и авторские тексты связаны</strong>
+                  <strong>Поиск, обмен, отзывы и авторские тексты связаны</strong>
                 </div>
               </div>
             </div>
@@ -983,13 +983,26 @@ export default function App() {
 
             <div className="partner-network-card" data-reveal="right">
               <div className="partner-network-map" aria-hidden="true">
-                <span className="partner-node node-library">Б</span>
-                <span className="partner-node node-campus">В</span>
-                <span className="partner-node node-cafe">К</span>
-                <span className="partner-node node-office">О</span>
-                <i className="network-line network-line-one" />
-                <i className="network-line network-line-two" />
-                <i className="network-line network-line-three" />
+                <span className="partner-hub">
+                  <small>центр сети</small>
+                  <strong>Книгомат</strong>
+                </span>
+                <span className="partner-node node-library">
+                  <small>Библиотека</small>
+                  <strong>подборки</strong>
+                </span>
+                <span className="partner-node node-campus">
+                  <small>Вуз</small>
+                  <strong>студенты</strong>
+                </span>
+                <span className="partner-node node-cafe">
+                  <small>Кафе</small>
+                  <strong>точка встречи</strong>
+                </span>
+                <span className="partner-node node-office">
+                  <small>Офис</small>
+                  <strong>обмен книгами</strong>
+                </span>
               </div>
 
               <div className="partner-network-caption">
