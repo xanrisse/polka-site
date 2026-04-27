@@ -276,18 +276,17 @@ export default function App() {
 
       {!prefersReducedMotion && (
         <div className="book-snow" aria-hidden="true">
-          {Array.from({ length: 42 }).map((_, index) => {
+          {Array.from({ length: 38 }).map((_, index) => {
             const direction = index % 2 === 0 ? 1 : -1;
-            const bookWidth = 24 + (index % 7) * 4;
-            const bookHeight = 36 + ((index * 5) % 8) * 4;
-            const driftSize = 46 + (index % 8) * 15;
+            const bookWidth = 22 + (index % 6) * 5;
+            const bookHeight = 30 + ((index * 3) % 7) * 4;
+            const driftSize = 38 + (index % 9) * 13;
             const signedDrift = direction * driftSize;
-            const scale = 0.68 + (index % 8) * 0.075;
-            const spin = 18 + (index % 7) * 9;
-            const duration = 32 + (index % 12) * 3.4;
-            const depth = 0.18 + (index % 6) * 0.1;
-            const thickness = 4 + (index % 4);
-            const fallRotate = direction * (12 + (index % 9) * 5);
+            const scale = 0.74 + (index % 7) * 0.07;
+            const spin = 10 + (index % 8) * 6;
+            const duration = 28 + (index % 11) * 2.7;
+            const depth = 0.18 + (index % 5) * 0.09;
+            const fallRotate = direction * (8 + (index % 9) * 4);
 
             return (
               <span
@@ -297,8 +296,8 @@ export default function App() {
                   "--x": `${(index * 23 + 11) % 100}%`,
                   "--delay": `${(index % 21) * -1.85}s`,
                   "--duration": `${duration}s`,
-                  "--drift-duration": `${duration * 0.72}s`,
-                  "--spin-duration": `${duration * 0.58}s`,
+                  "--drift-duration": `${duration * 0.68}s`,
+                  "--spin-duration": `${duration * 0.54}s`,
                   "--fall-mid-x": `${signedDrift * 0.35}px`,
                   "--fall-late-x": `${signedDrift * -0.22}px`,
                   "--fall-end-x": `${signedDrift}px`,
@@ -316,12 +315,10 @@ export default function App() {
                     "--drift-third": `${signedDrift * -0.18}px`,
                     "--book-width": `${bookWidth}px`,
                     "--book-height": `${bookHeight}px`,
-                    "--thickness": `${thickness}px`,
-                    "--negative-thickness": `${-thickness}px`,
                     "--scale": `${scale}`,
                     "--depth": `${depth}`,
-                    "--book-blur": `${Math.max(0, (0.9 - depth) * 0.72)}px`,
-                    "--tilt": `${-30 + (index % 11) * 6}deg`,
+                    "--book-blur": `${Math.max(0, (0.75 - depth) * 0.45)}px`,
+                    "--tilt": `${-24 + (index % 11) * 5}deg`,
                     "--spin": `${spin}deg`,
                     "--spin-back": `${-spin * 0.7}deg`,
                     "--spin-soft": `${spin * 0.42}deg`,
