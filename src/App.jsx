@@ -827,31 +827,62 @@ export default function App() {
         </section>
         <CatalogSection books={catalogBooks} onReserveBook={reserveBook} />
         <section id="guide" className="section service-section">
-  <div className="service-head" data-reveal="up">
-    <p className="eyebrow">сервис, а не просто история</p>
-    <h2>Что можно сделать в «Полке»</h2>
-    <p>
-      Лендинг ведёт не только по истории одной книги. Он показывает реальные
-      сценарии: найти книгу, оставить свою, опубликоваться или подключить новую
-      городскую точку.
-    </p>
-  </div>
+          <div className="service-layout">
+            <div className="service-intro-panel" data-reveal="left">
+              <div className="service-head">
+                <p className="eyebrow">сервис, а не просто история</p>
+                <h2>Что можно сделать в «Полке»</h2>
+                <p>
+                  Лендинг ведёт не только по истории одной книги. Он показывает
+                  реальные сценарии: найти книгу, оставить свою,
+                  опубликоваться или подключить новую городскую точку.
+                </p>
+              </div>
 
-  <div className="action-grid">
-    {serviceActions.map((action) => (
-      <button
-        key={action.title}
-        className="action-card"
-        data-reveal="up"
-        onClick={() => scrollToId(action.target)}
-      >
-        <span>{action.title}</span>
-        <p>{action.text}</p>
-        <strong>{action.button} →</strong>
-      </button>
-    ))}
-  </div>
-</section>
+              <div className="service-system-card" aria-label="Схема работы сервиса">
+                <div className="service-system-top">
+                  <span>Polka service layer</span>
+                  <strong>одна книга проходит весь маршрут</strong>
+                </div>
+
+                <div className="service-flow-map">
+                  <span>книга</span>
+                  <i />
+                  <span>книгомат</span>
+                  <i />
+                  <span>читатель</span>
+                  <i />
+                  <span>сообщество</span>
+                </div>
+
+                <div className="service-live-card">
+                  <small>сейчас в системе</small>
+                  <strong>поиск, обмен, отзывы и авторские тексты связаны</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="action-grid service-action-grid">
+              {serviceActions.map((action, index) => (
+                <button
+                  key={action.title}
+                  className="action-card service-action-card"
+                  data-reveal="up"
+                  onClick={() => scrollToId(action.target)}
+                  style={{
+                    "--service-index": `"${String(index + 1).padStart(2, "0")}"`,
+                  }}
+                >
+                  <i className="action-card-orb" aria-hidden="true" />
+                  <small>сценарий {String(index + 1).padStart(2, "0")}</small>
+                  <span>{action.title}</span>
+                  <p>{action.text}</p>
+                  <strong>{action.button} →</strong>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
 
 <section id="authors" className="section split-info-section">
   <div className="info-panel" data-reveal="left">
