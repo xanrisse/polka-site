@@ -131,6 +131,128 @@ button {
   color: #1c1209;
 }
 
+.side-stage-nav {
+  position: fixed;
+  z-index: 65;
+  right: clamp(12px, 1.8vw, 28px);
+  top: 50%;
+  width: 78px;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: rgba(18, 15, 11, 0.72);
+  backdrop-filter: blur(22px);
+  box-shadow: var(--shadow);
+  transform: translateY(-50%);
+}
+
+.side-to-top,
+.side-stage-button {
+  position: relative;
+  z-index: 1;
+  border: 1px solid transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.side-to-top {
+  width: 58px;
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  padding: 8px 6px;
+  border-radius: 20px;
+  background: var(--paper);
+  color: #1c1209;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+}
+
+.side-to-top span {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.side-to-top small,
+.side-stage-button small {
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.side-stage-list {
+  position: relative;
+  display: grid;
+  gap: 8px;
+}
+
+.side-stage-list::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 18px;
+  bottom: 18px;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(255, 247, 232, 0.2),
+    transparent
+  );
+  transform: translateX(-50%);
+}
+
+.side-stage-button {
+  width: 58px;
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  gap: 3px;
+  padding: 8px 5px;
+  border-radius: 20px;
+  background: rgba(255, 247, 232, 0.08);
+  border-color: rgba(255, 247, 232, 0.1);
+  backdrop-filter: blur(14px);
+  transition: 0.25s ease;
+}
+
+.side-stage-button span {
+  font-size: 13px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.side-stage-button small {
+  max-width: 100%;
+  color: rgba(255, 247, 232, 0.56);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.side-stage-button:hover,
+.side-stage-button.active {
+  background: var(--accent);
+  border-color: rgba(255, 255, 255, 0.32);
+  color: #1c1209;
+  transform: translateX(-4px);
+}
+
+.side-stage-button:hover small,
+.side-stage-button.active small {
+  color: rgba(28, 18, 9, 0.68);
+}
+
+.side-to-top:hover {
+  transform: translateY(-3px);
+}
+
 .hero {
   display: flex;
   align-items: center;
@@ -3776,6 +3898,8 @@ h3,
 .nav-dot,
 .nav-cta,
 .brand-mark,
+.side-to-top,
+.side-stage-button,
 .primary-btn,
 .ghost-btn,
 .store-btn,
@@ -3832,6 +3956,7 @@ h3,
 }
 
 .nav-dot.active,
+.side-stage-button.active,
 .catalog-filters button.active,
 .catalog-sort-pills button.active {
   background: linear-gradient(
@@ -3840,6 +3965,18 @@ h3,
     rgb(var(--page-support-rgb) / 0.92)
   );
   box-shadow: 0 16px 38px rgb(var(--page-accent-rgb) / 0.28);
+}
+
+.side-stage-nav {
+  border-color: rgba(255, 247, 232, 0.16);
+  background:
+    linear-gradient(135deg, rgba(17, 13, 10, 0.82), rgba(17, 13, 10, 0.58)),
+    radial-gradient(circle at 50% 10%, rgb(var(--page-accent-rgb) / 0.12), transparent 42%);
+}
+
+.side-to-top {
+  background:
+    linear-gradient(135deg, rgba(255, 247, 232, 0.98), rgba(255, 225, 176, 0.9));
 }
 
 .hero {
@@ -6005,5 +6142,17 @@ h1 span {
 
   .book-catalog-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1181px) {
+  .section {
+    padding-right: max(clamp(20px, 4vw, 76px), 118px);
+  }
+}
+
+@media (max-width: 1180px) {
+  .side-stage-nav {
+    display: none;
   }
 }
