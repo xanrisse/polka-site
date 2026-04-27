@@ -2466,6 +2466,10 @@ h1 span {
 .partner-network-card {
   position: relative;
   min-height: 440px;
+  display: grid;
+  grid-template-rows: minmax(300px, 1fr) auto;
+  gap: 18px;
+  padding: 28px;
   border: 1px solid rgba(255, 247, 232, 0.14);
   border-radius: 46px;
   background:
@@ -2478,12 +2482,12 @@ h1 span {
 }
 
 .partner-network-map {
-  position: absolute;
-  inset: 28px;
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(118px, 0.78fr) minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr) minmax(118px, 0.82fr) minmax(0, 1fr);
   gap: 18px;
+  min-height: 300px;
   border-radius: 34px;
   background:
     linear-gradient(90deg, rgba(255, 247, 232, 0.055) 1px, transparent 1px),
@@ -2608,10 +2612,7 @@ h1 span {
 }
 
 .partner-network-caption {
-  position: absolute;
-  left: 28px;
-  right: 28px;
-  bottom: 28px;
+  position: relative;
   padding: 22px 24px;
   border-radius: 28px;
   background:
