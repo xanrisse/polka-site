@@ -3839,7 +3839,8 @@ h3,
   transition: background 700ms ease;
 }
 
-.site-shell > * {
+.site-shell
+  > :not(.floating-nav):not(.side-stage-nav):not(.cursor-light):not(.scroll-progress):not(.floating-book):not(.site-noise):not(.modal-overlay) {
   position: relative;
   z-index: 1;
 }
